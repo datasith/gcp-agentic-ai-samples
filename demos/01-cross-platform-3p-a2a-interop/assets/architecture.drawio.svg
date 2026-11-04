@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1440px" height="900px" viewBox="0 0 1440 900" content="&lt;mxfile host=&quot;app.diagrams.net&quot; modified=&quot;2026-11-04T04:30:00.000Z&quot; agent=&quot;gcp-agentic-ai-solutions&quot; version=&quot;24.7.17&quot; type=&quot;device&quot;&gt;
+  &lt;diagram id=&quot;cross-platform-3p-a2a-interop&quot; name=&quot;3P to GCP Agent Runtime Architecture&quot;&gt;
+    &lt;mxGraphModel dx=&quot;1440&quot; dy=&quot;920&quot; grid=&quot;1&quot; gridSize=&quot;10&quot; guides=&quot;1&quot; tooltips=&quot;1&quot; connect=&quot;1&quot; arrows=&quot;1&quot; fold=&quot;1&quot; page=&quot;1&quot; pageScale=&quot;1&quot; pageWidth=&quot;1440&quot; pageHeight=&quot;920&quot; math=&quot;0&quot; shadow=&quot;0&quot;&gt;
+      &lt;root&gt;
+        &lt;mxCell id=&quot;0&quot;/&gt;
+        &lt;mxCell id=&quot;1&quot; parent=&quot;0&quot;/&gt;
+        &lt;mxCell id=&quot;title_box&quot; value=&quot;Cross-Platform 3P Agent &amp;amp;lt;-&amp;amp;gt; GCP Vertex AI Agent Runtime Interoperability (A2A + WIF + Agent Registry + Agent Gateway)&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#1A73E8;strokeColor=#1557B0;fontColor=#FFFFFF;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;40&quot; y=&quot;20&quot; width=&quot;1320&quot; height=&quot;48&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;zone_3p&quot; value=&quot;External 3P SaaS / Agent Platform (e.g., LMS / Hugging Face Spaces / Partner Cloud)&quot; style=&quot;swimlane;whiteSpace=wrap;html=1;fillColor=#F8F9FA;strokeColor=#5F6368;fontColor=#202124;fontStyle=1;fontSize=13;startSize=32;rounded=1;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;40&quot; y=&quot;90&quot; width=&quot;320&quot; height=&quot;690&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_3p_agent&quot; value=&quot;&amp;lt;b&amp;gt;External 3P A2A Agent&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;(FastAPI / SaaS Runtime)&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;• GET /.well-known/agent-card.json&amp;lt;br&amp;gt;• POST /a2a (JSON-RPC 2.0 v0.3.0)&amp;lt;br&amp;gt;• Returns Task + contextId + Artifacts&amp;lt;br&amp;gt;• POST /delegate-to-gcp&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5F6368;fontColor=#202124;align=left;spacingLeft=12;fontSize=12;&quot; vertex=&quot;1&quot; parent=&quot;zone_3p&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;55&quot; width=&quot;280&quot; height=&quot;170&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_3p_idp&quot; value=&quot;&amp;lt;b&amp;gt;3P OIDC Identity Provider (IdP)&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;(Built-in RS256 Signer or Institutional IdP)&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;• GET /.well-known/openid-configuration&amp;lt;br&amp;gt;• GET /.well-known/jwks.json&amp;lt;br&amp;gt;• Signs JWT (sub: agent:external-3p-lms-agent)&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#137333;fontColor=#0D652D;align=left;spacingLeft=12;fontSize=12;&quot; vertex=&quot;1&quot; parent=&quot;zone_3p&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;260&quot; width=&quot;280&quot; height=&quot;150&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_3p_tools&quot; value=&quot;&amp;lt;b&amp;gt;3P Domain Skills &amp;amp;amp; Data&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• course_syllabus_lookup (CS-401, AI-302)&amp;lt;br&amp;gt;• student_support_ticket&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DADCE0;fontColor=#3C4043;align=left;spacingLeft=12;fontSize=12;&quot; vertex=&quot;1&quot; parent=&quot;zone_3p&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;445&quot; width=&quot;280&quot; height=&quot;110&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;zone_inbound&quot; value=&quot;Direction 1 (Inbound: 3P -&amp;amp;gt; GCP): Keyless WIF Auth &amp;amp;amp; Ingress Governance&quot; style=&quot;swimlane;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#137333;fontColor=#0D652D;fontStyle=1;fontSize=13;startSize=32;rounded=1;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;400&quot; y=&quot;90&quot; width=&quot;540&quot; height=&quot;310&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_wif_sts&quot; value=&quot;&amp;lt;b&amp;gt;[1] IAM Workload Identity Federation (WIF) + STS&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• Pool: external-3p-agent-pool / Provider: external-3p-oidc-provider&amp;lt;br&amp;gt;• RFC 8693 Token Exchange at sts.googleapis.com/v1/token&amp;lt;br&amp;gt;• Maps assertion.sub -&amp;amp;gt; principal://iam.googleapis.com/.../subject/agent:external-3p-lms-agent&amp;lt;br&amp;gt;• Grants roles/aiplatform.user (Zero Static Service Account Keys)&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#202124;align=left;spacingLeft=12;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone_inbound&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;45&quot; width=&quot;500&quot; height=&quot;115&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_ingress_gw&quot; value=&quot;&amp;lt;b&amp;gt;[2] Agent Gateway (CLIENT_TO_AGENT Ingress Mode) + Model Armor&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• Governs synchronous query / streamQuery &amp;amp;amp; A2A (/v1/card, /v1/message:send)&amp;lt;br&amp;gt;• Model Armor Template: Prompt Injection, Jailbreak &amp;amp;amp; PII/FERPA DLP screening&amp;lt;br&amp;gt;• Note: Agent Runtime /v1/card requires Bearer token (not anonymous)&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF7E0;strokeColor=#B06000;fontColor=#202124;align=left;spacingLeft=12;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone_inbound&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;175&quot; width=&quot;500&quot; height=&quot;115&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;zone_outbound&quot; value=&quot;Direction 2 (Outbound: GCP -&amp;amp;gt; 3P): Agent Registry, Auth Manager &amp;amp;amp; Egress Governance&quot; style=&quot;swimlane;whiteSpace=wrap;html=1;fillColor=#F3E8FD;strokeColor=#9334E6;fontColor=#681DA8;fontStyle=1;fontSize=13;startSize=32;rounded=1;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;400&quot; y=&quot;420&quot; width=&quot;540&quot; height=&quot;360&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_registry&quot; value=&quot;&amp;lt;b&amp;gt;[A] Agent Registry (Regional: us-central1)&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• google_agent_registry_service (type = A2A_AGENT_CARD, top-level interfaces omitted)&amp;lt;br&amp;gt;• Auto-ingests into agents/agentregistry-{uuid} + indexes ReasoningEngine&amp;lt;br&amp;gt;• Resolved once at container startup via registry.list_agents() + get_remote_a2a_agent()&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9334E6;fontColor=#202124;align=left;spacingLeft=12;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone_outbound&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;45&quot; width=&quot;500&quot; height=&quot;95&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_auth_mgr&quot; value=&quot;&amp;lt;b&amp;gt;[B] Agent Identity Auth Manager + Registry Binding&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• google_agent_identity_auth_provider (stores 3P 2LO/3LO OAuth or Bearer API Token)&amp;lt;br&amp;gt;• google_agent_registry_binding links Source ReasoningEngine URN -&amp;amp;gt; Target 3P Service URN&amp;lt;br&amp;gt;• ADK attaches credentials via CredentialManager.register_auth_provider(GcpAuthProvider())&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#202124;align=left;spacingLeft=12;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone_outbound&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;150&quot; width=&quot;500&quot; height=&quot;95&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_egress_gw&quot; value=&quot;&amp;lt;b&amp;gt;[C] Agent Gateway (AGENT_TO_ANYWHERE Egress) + IAM UAP + AuthzPolicy&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• Default-deny outbound proxy via IAP v2 (iap.googleapis.com/resources.egressViaIAP)&amp;lt;br&amp;gt;• Scoped to destination.agent_registry.service.name (requires disableAccessPolicyBindings=false)&amp;lt;br&amp;gt;• AuthzPolicy allowlists *.googleapis.com + *.mtls.googleapis.com to prevent HTTP 498 lockout&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF7E0;strokeColor=#B06000;fontColor=#202124;align=left;spacingLeft=12;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone_outbound&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;255&quot; width=&quot;500&quot; height=&quot;90&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;zone_gcp&quot; value=&quot;Google Cloud Project: Vertex AI Agent Runtime (us-central1)&quot; style=&quot;swimlane;whiteSpace=wrap;html=1;fillColor=#E8F0FE;strokeColor=#1A73E8;fontColor=#174EA6;fontStyle=1;fontSize=13;startSize=32;rounded=1;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;980&quot; y=&quot;90&quot; width=&quot;380&quot; height=&quot;690&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_re&quot; value=&quot;&amp;lt;b&amp;gt;ReasoningEngine (StreamingAdkApp)&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;academic-interop-orchestrator&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;• Attested SPIFFE Agent Identity:&amp;lt;br&amp;gt;  principal://agents.global.org-ORG.system.id.goog/...&amp;lt;br&amp;gt;• Startup Hook: StreamingAdkApp.set_up()&amp;lt;br&amp;gt;• Pinned: google-adk[a2a,agent-identity,mcp]==2.13.0&amp;lt;br&amp;gt;• Callback: _strip_part_metadata_for_vertex&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A73E8;fontColor=#202124;align=left;spacingLeft=12;fontSize=12;&quot; vertex=&quot;1&quot; parent=&quot;zone_gcp&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;50&quot; width=&quot;340&quot; height=&quot;190&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_gemini&quot; value=&quot;&amp;lt;b&amp;gt;Vertex AI Global Model Endpoint&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• Model: gemini-3.8-flash&amp;lt;br&amp;gt;• GOOGLE_CLOUD_LOCATION = &amp;quot;global&amp;quot;&amp;lt;br&amp;gt;• AGENT_REGISTRY_LOCATION = &amp;quot;us-central1&amp;quot;&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1A73E8;fontColor=#174EA6;align=left;spacingLeft=12;fontSize=12;&quot; vertex=&quot;1&quot; parent=&quot;zone_gcp&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;265&quot; width=&quot;340&quot; height=&quot;115&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_local_tool&quot; value=&quot;&amp;lt;b&amp;gt;Internal GCP Tooling&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• get_campus_policy(topic)&amp;lt;br&amp;gt;  (late_submission, ferpa, ai_usage)&amp;lt;br&amp;gt;• VertexAiSessionService &amp;amp;amp; MemoryBank&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DADCE0;fontColor=#202124;align=left;spacingLeft=12;fontSize=12;&quot; vertex=&quot;1&quot; parent=&quot;zone_gcp&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;405&quot; width=&quot;340&quot; height=&quot;115&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;node_remote_a2a&quot; value=&quot;&amp;lt;b&amp;gt;ADK RemoteA2aAgent Sub-Agent&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;• Name: external_3p_lms_agent&amp;lt;br&amp;gt;• Single-parent rule (.clone() if shared)&amp;lt;br&amp;gt;• httpx Limits(max_keepalive_connections=0)&amp;lt;br&amp;gt;  to prevent multi-turn Event loop closed&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FD;strokeColor=#9334E6;fontColor=#202124;align=left;spacingLeft=12;fontSize=12;&quot; vertex=&quot;1&quot; parent=&quot;zone_gcp&quot;&gt;&lt;mxGeometry x=&quot;20&quot; y=&quot;545&quot; width=&quot;340&quot; height=&quot;125&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;edge_in_1&quot; value=&quot;1. OIDC JWT (RS256)&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#137333;strokeWidth=2;fontColor=#0D652D;fontStyle=1;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;node_3p_idp&quot; target=&quot;node_wif_sts&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;edge_in_2&quot; value=&quot;2. Federated Bearer Token&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#B06000;strokeWidth=2;fontColor=#B06000;fontStyle=1;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;node_3p_agent&quot; target=&quot;node_ingress_gw&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;edge_in_3&quot; value=&quot;3. Screened A2A / streamQuery&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1A73E8;strokeWidth=2;fontColor=#174EA6;fontStyle=1;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;node_ingress_gw&quot; target=&quot;node_re&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;edge_out_1&quot; value=&quot;A. Resolve Card &amp;amp; URL&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9334E6;strokeWidth=2;fontColor=#681DA8;fontStyle=1;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;node_remote_a2a&quot; target=&quot;node_registry&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;edge_out_2&quot; value=&quot;B. Fetch Bound Secret&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#137333;strokeWidth=2;fontColor=#0D652D;fontStyle=1;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;node_remote_a2a&quot; target=&quot;node_auth_mgr&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;edge_out_3&quot; value=&quot;C. Governed Egress (IAP UAP)&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#B06000;strokeWidth=2;fontColor=#B06000;fontStyle=1;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;node_remote_a2a&quot; target=&quot;node_egress_gw&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+        &lt;mxCell id=&quot;edge_out_4&quot; value=&quot;D. POST /a2a (Bearer Token)&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9334E6;strokeWidth=2;fontColor=#681DA8;fontStyle=1;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;node_egress_gw&quot; target=&quot;node_3p_agent&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;
+      &lt;/root&gt;
+    &lt;/mxGraphModel&gt;
+  &lt;/diagram&gt;
+&lt;/mxfile&gt;" style="background-color: #f8f9fa; font-family: 'Google Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <filter id="card-shadow" x="-2%" y="-2%" width="104%" height="106%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#202124" flood-opacity="0.08"/>
+    </filter>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#1a73e8"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#137333"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#b06000"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#9334e6"/>
+    </marker>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect x="0" y="0" width="1440" height="900" fill="#f8f9fa"/>
+
+  <!-- Top Header Banner -->
+  <rect x="30" y="20" width="1380" height="58" rx="10" fill="#1a73e8" filter="url(#card-shadow)"/>
+  <text x="720" y="45" fill="#ffffff" font-size="18" font-weight="700" text-anchor="middle">Cross-Platform 3P Agent &lt;-&gt; GCP Vertex AI Agent Runtime Interoperability</text>
+  <text x="720" y="66" fill="#e8f0fe" font-size="12" font-weight="500" text-anchor="middle">A2A over HTTP+JSON  |  IAM Workload Identity Federation (RFC 8693)  |  Agent Registry &amp; Auth Manager  |  Dual-Mode Agent Gateway (CLIENT_TO_AGENT + AGENT_TO_ANYWHERE)</text>
+
+  <!-- ===================================================================== -->
+  <!-- ZONE 1: External 3P SaaS / Agent Platform (Left Column)               -->
+  <!-- ===================================================================== -->
+  <rect x="30" y="96" width="330" height="724" rx="12" fill="#ffffff" stroke="#5f6368" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <rect x="30" y="96" width="330" height="38" rx="12" fill="#3c4043"/>
+  <rect x="30" y="120" width="330" height="14" fill="#3c4043"/>
+  <text x="195" y="120" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">External 3P SaaS / Agent Platform</text>
+  <text x="195" y="152" fill="#5f6368" font-size="11" font-weight="600" text-anchor="middle">(e.g., Blackboard / Anthology / Hugging Face Spaces)</text>
+
+  <!-- Box 1A: 3P OIDC IdP -->
+  <rect x="48" y="168" width="294" height="175" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+  <rect x="48" y="168" width="294" height="28" rx="8" fill="#137333"/>
+  <text x="195" y="187" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">3P OIDC Identity Provider (IdP)</text>
+  <text x="60" y="214" fill="#202124" font-size="11" font-weight="600">Endpoints &amp; Claims:</text>
+  <text x="60" y="233" fill="#3c4043" font-size="11">• GET /.well-known/openid-configuration</text>
+  <text x="60" y="251" fill="#3c4043" font-size="11">• GET /.well-known/jwks.json (RS256 Public Key)</text>
+  <text x="60" y="269" fill="#3c4043" font-size="11">• Mints signed JWT assertion:</text>
+  <text x="72" y="287" fill="#0d652d" font-size="10.5" font-family="monospace">iss: https://external-3p-agent...</text>
+  <text x="72" y="303" fill="#0d652d" font-size="10.5" font-family="monospace">sub: agent:external-3p-lms-agent</text>
+  <text x="72" y="319" fill="#0d652d" font-size="10.5" font-family="monospace">aud: //iam.googleapis.com/.../providers/...</text>
+
+  <!-- Box 1B: 3P A2A Agent Server & Client -->
+  <rect x="48" y="365" width="294" height="235" rx="8" fill="#f8f9fa" stroke="#5f6368" stroke-width="1.5"/>
+  <rect x="48" y="365" width="294" height="28" rx="8" fill="#5f6368"/>
+  <text x="195" y="384" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">External 3P A2A Agent (FastAPI :7860)</text>
+  <text x="60" y="412" fill="#202124" font-size="11" font-weight="600">Inbound Client (Calls GCP):</text>
+  <text x="60" y="430" fill="#3c4043" font-size="11">• POST /delegate-to-gcp</text>
+  <text x="60" y="447" fill="#3c4043" font-size="11">• Exchanges JWT at STS -&gt; Calls ReasoningEngine</text>
+  <line x1="60" y1="460" x2="330" y2="460" stroke="#dadce0" stroke-width="1"/>
+  <text x="60" y="480" fill="#202124" font-size="11" font-weight="600">Outbound Target (Called by GCP over A2A):</text>
+  <text x="60" y="498" fill="#3c4043" font-size="11">• GET /.well-known/agent-card.json (A2A v0.3.0)</text>
+  <text x="60" y="516" fill="#3c4043" font-size="11">• POST /a2a (JSON-RPC message/send)</text>
+  <text x="60" y="534" fill="#3c4043" font-size="11">• Verifies Authorization: Bearer &lt;token&gt;</text>
+  <text x="60" y="552" fill="#3c4043" font-size="11">• Returns Task with required contextId &amp; Artifacts</text>
+  <text x="60" y="570" fill="#5f6368" font-size="10.5" font-family="monospace">protocolVersion: "0.3.0" | JSONRPC</text>
+
+  <!-- Box 1C: 3P Domain Skills -->
+  <rect x="48" y="622" width="294" height="176" rx="8" fill="#ffffff" stroke="#dadce0" stroke-width="1.5"/>
+  <rect x="48" y="622" width="294" height="26" rx="8" fill="#e8eaed"/>
+  <text x="195" y="639" fill="#202124" font-size="11.5" font-weight="700" text-anchor="middle">3P Domain Skills &amp; LMS Records</text>
+  <text x="60" y="666" fill="#1a73e8" font-size="11" font-weight="600">1. course_syllabus_lookup</text>
+  <text x="72" y="683" fill="#3c4043" font-size="10.5">• CS-401: Distributed Agentic Systems</text>
+  <text x="72" y="699" fill="#3c4043" font-size="10.5">• AI-302: Enterprise AI Governance</text>
+  <text x="60" y="724" fill="#1a73e8" font-size="11" font-weight="600">2. student_support_ticket</text>
+  <text x="72" y="741" fill="#3c4043" font-size="10.5">• Creates advisor support ticket LMS-XXXXXX</text>
+  <text x="60" y="772" fill="#5f6368" font-size="10" font-style="italic">Zero static GCP Service Account keys stored in 3P</text>
+
+  <!-- ===================================================================== -->
+  <!-- ZONE 2: Direction 1 Inbound (Top Center)                              -->
+  <!-- ===================================================================== -->
+  <rect x="415" y="96" width="560" height="335" rx="12" fill="#e6f4ea" stroke="#137333" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <rect x="415" y="96" width="560" height="36" rx="12" fill="#137333"/>
+  <rect x="415" y="120" width="560" height="12" fill="#137333"/>
+  <text x="695" y="119" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">Direction 1 (Inbound: 3P -&gt; GCP): WIF Authentication &amp; Ingress Governance</text>
+
+  <!-- Box 2A: WIF + STS -->
+  <rect x="435" y="146" width="520" height="126" rx="8" fill="#ffffff" stroke="#137333" stroke-width="1.5"/>
+  <circle cx="456" cy="166" r="11" fill="#137333"/>
+  <text x="456" y="170" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">1</text>
+  <text x="475" y="170" fill="#0d652d" font-size="12" font-weight="700">IAM Workload Identity Federation (WIF) + Google STS (RFC 8693)</text>
+  <text x="448" y="191" fill="#3c4043" font-size="11">• Pool: <tspan font-family="monospace" fill="#202124">external-3p-agent-pool</tspan>  |  OIDC Provider: <tspan font-family="monospace" fill="#202124">external-3p-oidc-provider</tspan></text>
+  <text x="448" y="209" fill="#3c4043" font-size="11">• Attribute Condition: <tspan font-family="monospace" fill="#0d652d">assertion.sub == 'agent:external-3p-lms-agent'</tspan></text>
+  <text x="448" y="227" fill="#3c4043" font-size="11">• Exchanges 3P RS256 JWT at <tspan font-family="monospace" fill="#202124">https://sts.googleapis.com/v1/token</tspan> for short-lived Bearer token</text>
+  <text x="448" y="245" fill="#3c4043" font-size="11">• IAM Binding grants <tspan font-family="monospace" fill="#137333">roles/aiplatform.user</tspan> to federated <tspan font-family="monospace">principal://iam.googleapis.com/...</tspan></text>
+  <text x="448" y="263" fill="#b06000" font-size="10.5" font-weight="600">Gotcha #1: Agent Registry does NOT authorize inbound traffic; WIF + IAM governs Direction 1.</text>
+
+  <!-- Box 2B: Ingress Agent Gateway + Model Armor -->
+  <rect x="435" y="284" width="520" height="132" rx="8" fill="#fef7e0" stroke="#b06000" stroke-width="1.5"/>
+  <circle cx="456" cy="304" r="11" fill="#b06000"/>
+  <text x="456" y="308" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">2</text>
+  <text x="475" y="308" fill="#b06000" font-size="12" font-weight="700">Agent Gateway (CLIENT_TO_AGENT Ingress Mode) + Model Armor</text>
+  <text x="448" y="329" fill="#3c4043" font-size="11">• Resource: <tspan font-family="monospace" fill="#202124">google_network_services_agent_gateway (governed_access_path = CLIENT_TO_AGENT)</tspan></text>
+  <text x="448" y="347" fill="#3c4043" font-size="11">• Screens inbound A2A (<tspan font-family="monospace">/v1/card</tspan>, <tspan font-family="monospace">/v1/message:send</tspan>) &amp; <tspan font-family="monospace">:streamQuery</tspan> before hitting agent code</text>
+  <text x="448" y="365" fill="#3c4043" font-size="11">• Model Armor Template (<tspan font-family="monospace">cross-platform-agent-guardrails</tspan>): PI/Jailbreak + RAI + PII/FERPA DLP</text>
+  <text x="448" y="383" fill="#b06000" font-size="10.5" font-weight="600">Gotcha #5 &amp; #6: /v1/card requires Bearer auth; CLIENT_TO_AGENT governs query/streamQuery (not asyncQuery).</text>
+  <text x="448" y="401" fill="#b06000" font-size="10.5" font-weight="600">Gotcha #4: All ReasoningEngines in the same project + region share one Ingress &amp; one Egress Gateway pair.</text>
+
+  <!-- ===================================================================== -->
+  <!-- ZONE 3: Direction 2 Outbound (Bottom Center)                          -->
+  <!-- ===================================================================== -->
+  <rect x="415" y="448" width="560" height="372" rx="12" fill="#f3e8fd" stroke="#9334e6" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <rect x="415" y="448" width="560" height="36" rx="12" fill="#9334e6"/>
+  <rect x="415" y="472" width="560" height="12" fill="#9334e6"/>
+  <text x="695" y="471" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">Direction 2 (Outbound: GCP -&gt; 3P): Agent Registry, Auth Manager &amp; Egress IAP</text>
+
+  <!-- Box 3A: Agent Registry -->
+  <rect x="435" y="496" width="520" height="98" rx="8" fill="#ffffff" stroke="#9334e6" stroke-width="1.5"/>
+  <circle cx="456" cy="515" r="11" fill="#9334e6"/>
+  <text x="456" y="519" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">A</text>
+  <text x="475" y="519" fill="#681da8" font-size="12" font-weight="700">Agent Registry (Regional: us-central1 — Not Supported in 'us'/'eu' Multi-Region)</text>
+  <text x="448" y="539" fill="#3c4043" font-size="11">• <tspan font-family="monospace">google_agent_registry_service</tspan> registers 3P <tspan font-family="monospace">A2A_AGENT_CARD</tspan> (omit top-level <tspan font-family="monospace">interfaces</tspan> — Gotcha #11)</text>
+  <text x="448" y="557" fill="#3c4043" font-size="11">• Auto-ingests into <tspan font-family="monospace">agents/agentregistry-{uuid}</tspan> &amp; auto-discovers deployed GCP <tspan font-family="monospace">ReasoningEngine</tspan></text>
+  <text x="448" y="575" fill="#681da8" font-size="10.5" font-weight="600">Gotcha #12: Resolve friendly displayName -&gt; agents/agentregistry-{uuid} via registry.list_agents() at startup.</text>
+
+  <!-- Box 3B: Agent Identity Auth Manager + Binding -->
+  <rect x="435" y="604" width="520" height="96" rx="8" fill="#ffffff" stroke="#137333" stroke-width="1.5"/>
+  <circle cx="456" cy="623" r="11" fill="#137333"/>
+  <text x="456" y="627" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">B</text>
+  <text x="475" y="627" fill="#0d652d" font-size="12" font-weight="700">Agent Identity Auth Manager + Agent Registry Binding</text>
+  <text x="448" y="647" fill="#3c4043" font-size="11">• <tspan font-family="monospace">google_agent_identity_auth_provider</tspan> stores outbound 3P 2LO/3LO OAuth or Bearer API Token</text>
+  <text x="448" y="665" fill="#3c4043" font-size="11">• <tspan font-family="monospace">google_agent_registry_binding</tspan> binds Source ReasoningEngine URN -&gt; Target 3P Service URN</text>
+  <text x="448" y="683" fill="#3c4043" font-size="11">• ADK resolves credentials at runtime via <tspan font-family="monospace">CredentialManager.register_auth_provider(GcpAuthProvider())</tspan></text>
+
+  <!-- Box 3C: Egress Agent Gateway + IAM UAP -->
+  <rect x="435" y="710" width="520" height="98" rx="8" fill="#fef7e0" stroke="#b06000" stroke-width="1.5"/>
+  <circle cx="456" cy="729" r="11" fill="#b06000"/>
+  <text x="456" y="733" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">C</text>
+  <text x="475" y="733" fill="#b06000" font-size="12" font-weight="700">Agent Gateway (AGENT_TO_ANYWHERE Egress) + IAM UAP + AuthzPolicy</text>
+  <text x="448" y="753" fill="#3c4043" font-size="11">• Default-deny egress proxy via IAP v2 (<tspan font-family="monospace">iap.googleapis.com/resources.egressViaIAP</tspan>)</text>
+  <text x="448" y="771" fill="#3c4043" font-size="11">• IAM UAP condition scopes egress from attested SPIFFE <tspan font-family="monospace">principalSet://agents.global.org-...</tspan> to 3P target</text>
+  <text x="448" y="789" fill="#b06000" font-size="10.5" font-weight="600">Gotcha #2 &amp; #3: Allowlist *.googleapis.com + *.mtls.googleapis.com (avoid HTTP 498) &amp; disable UAP org constraint.</text>
+
+  <!-- ===================================================================== -->
+  <!-- ZONE 4: GCP Vertex AI Agent Runtime (Right Column)                    -->
+  <!-- ===================================================================== -->
+  <rect x="1030" y="96" width="380" height="724" rx="12" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5" filter="url(#card-shadow)"/>
+  <rect x="1030" y="96" width="380" height="38" rx="12" fill="#1a73e8"/>
+  <rect x="1030" y="120" width="380" height="14" fill="#1a73e8"/>
+  <text x="1220" y="120" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">GCP Vertex AI Agent Runtime (us-central1)</text>
+  <text x="1220" y="152" fill="#174ea6" font-size="11" font-weight="600" text-anchor="middle">Dedicated Runtime SA: adk-interop-runtime-sa</text>
+
+  <!-- Box 4A: ReasoningEngine Container -->
+  <rect x="1048" y="168" width="344" height="215" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="1.5"/>
+  <rect x="1048" y="168" width="344" height="28" rx="8" fill="#1a73e8"/>
+  <text x="1220" y="187" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">ReasoningEngine (StreamingAdkApp)</text>
+  <text x="1060" y="212" fill="#202124" font-size="11" font-weight="600">Root Agent: academic_interop_orchestrator</text>
+  <text x="1060" y="231" fill="#3c4043" font-size="10.5">• Attested Workload Identity (<tspan font-family="monospace">AGENT_IDENTITY</tspan>):</text>
+  <text x="1068" y="247" fill="#174ea6" font-size="10" font-family="monospace">principal://agents.global.org-ORG.system.id.goog/...</text>
+  <text x="1060" y="266" fill="#3c4043" font-size="10.5">• Exposes A2A (<tspan font-family="monospace">/v1/card</tspan>, <tspan font-family="monospace">/v1/message:send</tspan>) &amp; <tspan font-family="monospace">:streamQuery</tspan></text>
+  <text x="1060" y="284" fill="#3c4043" font-size="10.5">• <tspan font-family="monospace">_strip_part_metadata_for_vertex</tspan> callback (Gotcha #10)</text>
+  <text x="1060" y="302" fill="#3c4043" font-size="10.5">• Zero-skew pickle (<tspan font-family="monospace">_tmpl_attrs["agent"] = None</tspan>, Gotcha #14)</text>
+  <text x="1060" y="320" fill="#3c4043" font-size="10.5">• Relative <tspan font-family="monospace">extra_packages=["agent.py"]</tspan> (Gotcha #14)</text>
+  <text x="1060" y="338" fill="#3c4043" font-size="10.5">• Pinned extras (Gotcha #12):</text>
+  <text x="1068" y="354" fill="#137333" font-size="10" font-family="monospace">google-adk[a2a,agent-identity,mcp]==2.13.0</text>
+
+  <!-- Box 4B: Gemini 3.8 Flash Global Endpoint -->
+  <rect x="1048" y="402" width="344" height="118" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="1.5"/>
+  <rect x="1048" y="402" width="344" height="26" rx="8" fill="#d2e3fc"/>
+  <text x="1220" y="419" fill="#174ea6" font-size="11.5" font-weight="700" text-anchor="middle">Vertex AI Global Model Endpoint (Gotcha #13)</text>
+  <text x="1060" y="443" fill="#202124" font-size="11">• Model: <tspan font-family="monospace" font-weight="700" fill="#1a73e8">gemini-3.8-flash</tspan></text>
+  <text x="1060" y="462" fill="#3c4043" font-size="10.5">• <tspan font-family="monospace">AGENT_REGISTRY_LOCATION = "us-central1"</tspan> (Regional)</text>
+  <text x="1060" y="480" fill="#3c4043" font-size="10.5">• <tspan font-family="monospace">GOOGLE_CLOUD_LOCATION = "global"</tspan> (set in <tspan font-family="monospace">set_up()</tspan>)</text>
+  <text x="1060" y="498" fill="#5f6368" font-size="10" font-style="italic">Prevents 404 NOT_FOUND on regional model path</text>
+
+  <!-- Box 4C: Internal GCP Tools -->
+  <rect x="1048" y="538" width="344" height="96" rx="8" fill="#ffffff" stroke="#dadce0" stroke-width="1.5"/>
+  <rect x="1048" y="538" width="344" height="26" rx="8" fill="#e8eaed"/>
+  <text x="1220" y="555" fill="#202124" font-size="11.5" font-weight="700" text-anchor="middle">Internal GCP Tools &amp; State Services</text>
+  <text x="1060" y="579" fill="#3c4043" font-size="11">• <tspan font-family="monospace" fill="#1a73e8">get_campus_policy(topic)</tspan> (late_submission, ferpa, ai_usage)</text>
+  <text x="1060" y="597" fill="#3c4043" font-size="11">• <tspan font-family="monospace">VertexAiSessionService</tspan> &amp; <tspan font-family="monospace">VertexAiMemoryBankService</tspan></text>
+  <text x="1060" y="615" fill="#3c4043" font-size="11">• Cloud Logging (<tspan font-family="monospace">reasoning_engine_stdout / stderr</tspan>)</text>
+
+  <!-- Box 4D: RemoteA2aAgent Sub-Agent -->
+  <rect x="1048" y="652" width="344" height="146" rx="8" fill="#f3e8fd" stroke="#9334e6" stroke-width="1.5"/>
+  <rect x="1048" y="652" width="344" height="28" rx="8" fill="#9334e6"/>
+  <text x="1220" y="670" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">ADK Sub-Agent: RemoteA2aAgent</text>
+  <text x="1060" y="695" fill="#202124" font-size="11">• Delegated via <tspan font-family="monospace" font-weight="600">transfer_to_agent('external_3p_lms_agent')</tspan></text>
+  <text x="1060" y="714" fill="#3c4043" font-size="10.5">• Resolved once at startup (use <tspan font-family="monospace">.clone()</tspan> if shared — Gotcha #9)</text>
+  <text x="1060" y="732" fill="#3c4043" font-size="10.5">• <tspan font-family="monospace">httpx.Limits(max_keepalive_connections=0)</tspan> (Gotcha #15):</text>
+  <text x="1068" y="749" fill="#681da8" font-size="10">Prevents "Event loop is closed" across per-turn asyncio.run()</text>
+  <text x="1060" y="768" fill="#3c4043" font-size="10.5">• Validates 3P <tspan font-family="monospace">Task</tspan> with <tspan font-family="monospace">contextId</tspan> &amp; converts artifacts</text>
+
+  <!-- ===================================================================== -->
+  <!-- CONNECTING ARROWS & FLOW LABELS                                       -->
+  <!-- ===================================================================== -->
+
+  <!-- Direction 1 Arrow 1: 3P IdP -> WIF STS -->
+  <path d="M 342 225 L 430 225" fill="none" stroke="#137333" stroke-width="2.5" marker-end="url(#arrow-green)"/>
+  <rect x="350" y="196" width="76" height="22" rx="4" fill="#e6f4ea" stroke="#137333" stroke-width="1"/>
+  <text x="388" y="211" fill="#0d652d" font-size="10" font-weight="700" text-anchor="middle">1. OIDC JWT</text>
+
+  <!-- Direction 1 Arrow 2: WIF STS -> 3P Agent (Federated Token) -->
+  <path d="M 435 255 L 388 255 L 388 415 L 346 415" fill="none" stroke="#137333" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow-green)"/>
+  <rect x="348" y="310" width="80" height="32" rx="4" fill="#ffffff" stroke="#137333" stroke-width="1"/>
+  <text x="388" y="324" fill="#0d652d" font-size="9.5" font-weight="700" text-anchor="middle">2. Short-Lived</text>
+  <text x="388" y="336" fill="#0d652d" font-size="9.5" font-weight="700" text-anchor="middle">Bearer Token</text>
+
+  <!-- Direction 1 Arrow 3: 3P Agent -> Ingress Gateway -->
+  <path d="M 342 440 L 402 440 L 402 350 L 430 350" fill="none" stroke="#b06000" stroke-width="2.5" marker-end="url(#arrow-amber)"/>
+  <rect x="350" y="368" width="76" height="22" rx="4" fill="#fef7e0" stroke="#b06000" stroke-width="1"/>
+  <text x="388" y="383" fill="#b06000" font-size="10" font-weight="700" text-anchor="middle">3. A2A Call</text>
+
+  <!-- Direction 1 Arrow 4: Ingress Gateway -> ReasoningEngine -->
+  <path d="M 955 340 L 1043 260" fill="none" stroke="#1a73e8" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <rect x="962" y="272" width="78" height="32" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1"/>
+  <text x="1001" y="286" fill="#174ea6" font-size="9.5" font-weight="700" text-anchor="middle">4. Screened</text>
+  <text x="1001" y="298" fill="#174ea6" font-size="9.5" font-weight="700" text-anchor="middle">streamQuery</text>
+
+  <!-- Direction 2 Arrow A: RemoteA2aAgent -> Agent Registry -->
+  <path d="M 1048 690 L 995 690 L 995 545 L 960 545" fill="none" stroke="#9334e6" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow-purple)"/>
+  <rect x="962" y="565" width="76" height="32" rx="4" fill="#f3e8fd" stroke="#9334e6" stroke-width="1"/>
+  <text x="1000" y="579" fill="#681da8" font-size="9.5" font-weight="700" text-anchor="middle">A. Resolve</text>
+  <text x="1000" y="591" fill="#681da8" font-size="9.5" font-weight="700" text-anchor="middle">Agent Card</text>
+
+  <!-- Direction 2 Arrow B: RemoteA2aAgent -> Auth Manager -->
+  <path d="M 1048 715 L 1005 715 L 1005 650 L 960 650" fill="none" stroke="#137333" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow-green)"/>
+  <rect x="962" y="646" width="76" height="32" rx="4" fill="#e6f4ea" stroke="#137333" stroke-width="1"/>
+  <text x="1000" y="660" fill="#0d652d" font-size="9.5" font-weight="700" text-anchor="middle">B. Bound</text>
+  <text x="1000" y="672" fill="#0d652d" font-size="9.5" font-weight="700" text-anchor="middle">3P Token</text>
+
+  <!-- Direction 2 Arrow C: RemoteA2aAgent -> Egress Gateway -->
+  <path d="M 1048 755 L 960 755" fill="none" stroke="#b06000" stroke-width="2.5" marker-end="url(#arrow-amber)"/>
+  <rect x="962" y="762" width="76" height="32" rx="4" fill="#fef7e0" stroke="#b06000" stroke-width="1"/>
+  <text x="1000" y="776" fill="#b06000" font-size="9.5" font-weight="700" text-anchor="middle">C. Egress</text>
+  <text x="1000" y="788" fill="#b06000" font-size="9.5" font-weight="700" text-anchor="middle">via IAP UAP</text>
+
+  <!-- Direction 2 Arrow D: Egress Gateway -> 3P Agent /a2a -->
+  <path d="M 435 755 L 385 755 L 385 520 L 346 520" fill="none" stroke="#9334e6" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+  <rect x="348" y="555" width="80" height="34" rx="4" fill="#f3e8fd" stroke="#9334e6" stroke-width="1"/>
+  <text x="388" y="569" fill="#681da8" font-size="9.5" font-weight="700" text-anchor="middle">D. POST /a2a</text>
+  <text x="388" y="581" fill="#681da8" font-size="9.5" font-weight="700" text-anchor="middle">(Bearer Auth)</text>
+
+  <!-- Footer Legend -->
+  <rect x="30" y="836" width="1380" height="44" rx="8" fill="#ffffff" stroke="#dadce0" stroke-width="1"/>
+  <circle cx="55" cy="858" r="6" fill="#137333"/>
+  <text x="68" y="862" fill="#202124" font-size="11" font-weight="600">Inbound WIF &amp; Outbound Auth Manager (Keyless Identity)</text>
+  <circle cx="425" cy="858" r="6" fill="#9334e6"/>
+  <text x="438" y="862" fill="#202124" font-size="11" font-weight="600">Agent Registry &amp; A2A Protocol (Discovery &amp; Wire Format)</text>
+  <circle cx="795" cy="858" r="6" fill="#b06000"/>
+  <text x="808" y="862" fill="#202124" font-size="11" font-weight="600">Dual-Mode Agent Gateway + Model Armor + IAM UAP</text>
+  <circle cx="1140" cy="858" r="6" fill="#1a73e8"/>
+  <text x="1153" y="862" fill="#202124" font-size="11" font-weight="600">Vertex AI Agent Runtime &amp; Gemini 3.8 Flash</text>
+</svg>

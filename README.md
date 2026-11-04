@@ -15,7 +15,8 @@ gcp-agentic-ai-solutions/
 ├── .gitignore                                    # Global exclusions (.env*, .terraform*, state files)
 └── demos/
     ├── 01-cross-platform-3p-a2a-interop/         # Bidirectional 3P SaaS <-> GCP Agent Runtime (WIF, Agent Registry, Auth Manager, Dual-Mode Agent Gateway)
-    │   ├── README.md                             # Architecture, auth handshakes, deployment guide, & 10 Day-2 operational gotchas
+    │   ├── README.md                             # Architecture, auth handshakes, deployment guide, & 15 Day-2 operational gotchas
+    │   ├── assets/                               # Open-source architecture diagrams (architecture.drawio.svg, architecture.excalidraw, architecture.drawio)
     │   ├── terraform/                            # Declarative IaC for WIF, Agent Registry, Auth Bindings, Dual Agent Gateways, Model Armor, IAM UAP, & ReasoningEngine
     │   ├── gcp_agent_runtime/                    # ADK Orchestrator & A2A Server running on Vertex AI Agent Runtime (gemini-3.8-flash)
     │   ├── external_3p_agent/                    # External 3P A2A Agent + OIDC/JWKS issuer (deployable to Hugging Face Spaces Docker in 2 minutes)

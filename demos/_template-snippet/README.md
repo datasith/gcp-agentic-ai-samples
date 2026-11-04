@@ -6,7 +6,7 @@ Briefly describe the problem this snippet solves, the target runtime (`Agent Run
 
 ## 2. Architecture & Authentication Flow
 
-Include a Mermaid sequence or flowchart diagram showing identity, policy enforcement, and wire protocol boundaries.
+Include an open-source portable architecture diagram under `assets/` (`assets/architecture.drawio.svg` for inline GitHub rendering + Draw.io editing, and `assets/architecture.excalidraw` for Excalidraw editing) alongside a collapsible Mermaid sequence diagram showing identity, policy enforcement, and wire protocol boundaries.
 
 ## 3. Prerequisites & Quickstart
 

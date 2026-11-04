@@ -17,6 +17,13 @@ In enterprise architectures, the external 3P agent often lives inside a SaaS pla
 
 ## 2. Architecture & Operational Separation of Duties
 
+![Cross-Platform 3P Agent <-> GCP Agent Runtime Architecture](./assets/architecture.drawio.svg)
+
+> **Open-Source Editable Diagram Sources (`assets/`):**
+> - **[`assets/architecture.drawio.svg`](./assets/architecture.drawio.svg)** — Hybrid SVG + embedded `<mxfile>` [Draw.io](https://github.com/jgraph/drawio) XML. Renders natively in GitHub Markdown *and* opens directly with full editable layers/connectors in Draw.io Desktop/Web or the VS Code [`hediet.vscode-drawio`](https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio) extension.
+> - **[`assets/architecture.excalidraw`](./assets/architecture.excalidraw)** — Portable [Excalidraw](https://github.com/excalidraw/excalidraw) v2 JSON scene. Open or drag-and-drop in the Excalidraw web editor, Obsidian, or the VS Code [`pomdtr.excalidraw-editor`](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor) extension.
+> - **[`assets/architecture.drawio`](./assets/architecture.drawio)** — Standalone Draw.io XML source file.
+
 The single most important architectural distinction in Gemini Enterprise Agent Platform is **what Agent Registry governs** versus **what governs live wire traffic**:
 
 | Plane / Direction | Component | Operational Role |
@@ -24,6 +31,9 @@ The single most important architectural distinction in Gemini Enterprise Agent P
 | **Control Plane (Catalog & Discovery)** | **Agent Registry** (`google_agent_registry_service`) | Tracks the external 3P agent (`agents/<id>`), indexes its A2A skills from its Agent Card, allows ADK orchestrators to dynamically resolve its URL at startup, and serves as the destination identifier for outbound IAM UAP rules. **Not evaluated on inbound (`CLIENT_TO_AGENT`) traffic.** |
 | **Direction 1: Inbound (`3P -> GCP Agent Runtime`)** | **IAM WIF** + **Agent Gateway (`CLIENT_TO_AGENT`)** + **Model Armor** | 3P agent exchanges its native OIDC JWT at `sts.googleapis.com` for a short-lived GCP Bearer token (`roles/aiplatform.user`). `CLIENT_TO_AGENT` Agent Gateway intercepts inbound calls to `reasoningEngines`, runs Model Armor prompt-injection/DLP screening, and forwards to Agent Runtime. |
 | **Direction 2: Outbound (`GCP Agent Runtime -> 3P`)** | **Agent Identity (`SPIFFE`)** + **Auth Manager Binding** + **Agent Gateway (`AGENT_TO_ANYWHERE`)** + **IAM UAP** | Agent Runtime runs with `identity_type = "AGENT_IDENTITY"` (`principal://agents.global.org-ORG_ID.system.id.goog/...`), resolves the 3P agent from Agent Registry, attaches 3P credentials via `google_agent_registry_binding`, and egresses through `AGENT_TO_ANYWHERE` Agent Gateway where IAP enforces `iap.googleapis.com/resources.egressViaIAP` via IAM Unified Access Policies (UAP). |
+
+<details>
+<summary><strong>View Interactive Mermaid Sequence Diagram (Direction 1 &amp; Direction 2 Wire Protocol)</strong></summary>
 
 ```mermaid
 sequenceDiagram
@@ -51,6 +61,8 @@ sequenceDiagram
     OutGW->>Ext: 11. Forward Request with Injected 3P Bearer / OAuth Token
     Ext-->>Runtime: 12. A2A Task Artifact Response
 ```
+
+</details>
 
 ---
 
