@@ -1,4 +1,4 @@
-# Demo Template: [Title of Agentic AI Sample / Snippet]
+# Sample Template: [Title of Agentic AI Sample / Snippet]
 
 ## 1. Use Case & Architectural Overview
 

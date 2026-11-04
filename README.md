@@ -6,39 +6,38 @@ A modular collection of production-grade reference architectures, Infrastructure
 
 ## Repository Structure
 
-Each directory under [`demos/`](./demos/) is a self-contained, runnable architectural blueprint with its own Terraform configuration, agent source code, authentication harnesses, and operational runbook:
+Each numbered top-level directory is a self-contained, runnable sample and architectural blueprint with its own Terraform configuration, agent source code, authentication harnesses, and operational runbook:
 
 ```text
 gcp-agentic-ai-samples/
 ├── README.md                                     # Catalog index & architectural overview
 ├── LICENSE                                       # Apache 2.0 License
 ├── .gitignore                                    # Global exclusions (.env*, .terraform*, state files)
-└── demos/
-    ├── 01-cross-platform-3p-a2a-interop/         # Bidirectional 3P SaaS <-> GCP Agent Runtime (WIF, Agent Registry, Auth Manager, Dual-Mode Agent Gateway)
-    │   ├── README.md                             # Architecture, auth handshakes, deployment guide, & 15 Day-2 operational gotchas
-    │   ├── assets/                               # Open-source architecture diagrams (architecture.drawio.svg, architecture.excalidraw, architecture.drawio)
-    │   ├── terraform/                            # Declarative IaC for WIF, Agent Registry, Auth Bindings, Dual Agent Gateways, Model Armor, IAM UAP, & ReasoningEngine
-    │   ├── gcp_agent_runtime/                    # ADK Orchestrator & A2A Server running on Vertex AI Agent Runtime (gemini-3.8-flash)
-    │   ├── external_3p_agent/                    # External 3P A2A Agent + OIDC/JWKS issuer (deployable to Hugging Face Spaces Docker in 2 minutes)
-    │   └── scripts/                              # End-to-end Inbound (WIF -> GCP) and Outbound (GCP -> 3P) verification scripts
-    ├── 02-agent-platform-evaluation-flywheel/    # End-to-End Agent Platform Evaluation & Quality Flywheel (ADK + Metric Registry + Simulation + Loss Clusters + Online Monitor)
-    │   ├── README.md                             # 5-stage Quality Flywheel architecture, benchmark scorecard, & Day-2 operational gotchas
-    │   ├── assets/                               # Open-source architecture diagrams (architecture.drawio.svg, architecture.excalidraw, architecture.drawio)
-    │   ├── terraform/                            # Declarative IaC for Eval Artifacts Bucket, Least-Privilege ADK Runtime SA, P4SA Observability IAM, & Drift Alert Policy
-    │   ├── adk_agent/                            # Enterprise Cloud FinOps & Governance ADK Agent (v1_baseline vs v2_optimized) + Agent Runtime deployer
-    │   └── eval_framework/                       # Metric Registry setup, Golden + Multi-Turn User Simulation + Loss Cluster runner, CI/CD ship gate, & OnlineEvaluator
-    └── _template-snippet/                        # Boilerplate template for adding new Agentic AI snippets & demos
-        └── README.md
+├── 01-cross-platform-3p-a2a-interop/             # Bidirectional 3P SaaS <-> GCP Agent Runtime (WIF, Agent Registry, Auth Manager, Dual-Mode Agent Gateway)
+│   ├── README.md                                 # Architecture, auth handshakes, deployment guide, & 15 Day-2 operational gotchas
+│   ├── assets/                                   # Open-source architecture diagrams (architecture.drawio.svg, architecture.excalidraw, architecture.drawio)
+│   ├── terraform/                                # Declarative IaC for WIF, Agent Registry, Auth Bindings, Dual Agent Gateways, Model Armor, IAM UAP, & ReasoningEngine
+│   ├── gcp_agent_runtime/                        # ADK Orchestrator & A2A Server running on Vertex AI Agent Runtime (gemini-3.8-flash)
+│   ├── external_3p_agent/                        # External 3P A2A Agent + OIDC/JWKS issuer (deployable to Hugging Face Spaces Docker in 2 minutes)
+│   └── scripts/                                  # End-to-end Inbound (WIF -> GCP) and Outbound (GCP -> 3P) verification scripts
+├── 02-agent-platform-evaluation-flywheel/        # End-to-End Agent Platform Evaluation & Quality Flywheel (ADK + Metric Registry + Simulation + Loss Clusters + Online Monitor)
+│   ├── README.md                                 # 5-stage Quality Flywheel architecture, benchmark scorecard, & Day-2 operational gotchas
+│   ├── assets/                                   # Open-source architecture diagrams (architecture.drawio.svg, architecture.excalidraw, architecture.drawio)
+│   ├── terraform/                                # Declarative IaC for Eval Artifacts Bucket, Least-Privilege ADK Runtime SA, P4SA Observability IAM, & Drift Alert Policy
+│   ├── adk_agent/                                # Enterprise Cloud FinOps & Governance ADK Agent (v1_baseline vs v2_optimized) + Agent Runtime deployer
+│   └── eval_framework/                           # Metric Registry setup, Golden + Multi-Turn User Simulation + Loss Cluster runner, CI/CD ship gate, & OnlineEvaluator
+└── _template-sample/                             # Boilerplate template for adding new Agentic AI samples & architectural snippets
+    └── README.md
 ```
 
 ---
 
-## Catalog of Demos & Snippets
+## Catalog of Samples & Snippets
 
-| # | Demo / Snippet | Core Primitives Demonstrated | External / 3P Surface | Status |
+| # | Sample / Reference Architecture | Core Primitives Demonstrated | External / 3P Surface | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **01** | [**Cross-Platform 3P Agent <-> GCP Agent Runtime Interoperability**](./demos/01-cross-platform-3p-a2a-interop/) | `Agent Runtime` (`reasoningEngines`), `A2A` over HTTP+JSON, `IAM Workload Identity Federation (WIF)`, `Agent Registry`, `Agent Identity Auth Manager`, `Agent Gateway` (`CLIENT_TO_AGENT` + `AGENT_TO_ANYWHERE`), `Model Armor`, `IAM Unified Access Policies (UAP)` | Hugging Face Spaces (Docker FastAPI A2A Server + OIDC/JWKS Issuer) & GitHub Actions OIDC | Ready |
-| **02** | [**Agent Platform Evaluation & Continuous Quality Flywheel**](./demos/02-agent-platform-evaluation-flywheel/) | `ADK` (`gemini-3.8-flash`), `Agent Runtime` (`reasoningEngines`), `agentplatform.Client.evals`, `Metric Registry` (`LLMMetric` + `CodeExecutionMetric` + Adaptive `RubricMetric`), `User Simulation` (`generate_conversation_scenarios`), `Automatic Loss Clusters` (`generate_loss_clusters`), `EvaluationExperiment` / `EvaluationRun`, `OnlineEvaluator` + `Cloud Monitoring` Drift Alerts | OpenTelemetry GenAI v1.39+ (`EVENT_ONLY` trace spans) & GitHub Actions / Cloud Build CI Ship Gate | Ready |
+| **01** | [**Cross-Platform 3P Agent <-> GCP Agent Runtime Interoperability**](./01-cross-platform-3p-a2a-interop/) | `Agent Runtime` (`reasoningEngines`), `A2A` over HTTP+JSON, `IAM Workload Identity Federation (WIF)`, `Agent Registry`, `Agent Identity Auth Manager`, `Agent Gateway` (`CLIENT_TO_AGENT` + `AGENT_TO_ANYWHERE`), `Model Armor`, `IAM Unified Access Policies (UAP)` | Hugging Face Spaces (Docker FastAPI A2A Server + OIDC/JWKS Issuer) & GitHub Actions OIDC | Ready |
+| **02** | [**Agent Platform Evaluation & Continuous Quality Flywheel**](./02-agent-platform-evaluation-flywheel/) | `ADK` (`gemini-3.8-flash`), `Agent Runtime` (`reasoningEngines`), `agentplatform.Client.evals`, `Metric Registry` (`LLMMetric` + `CodeExecutionMetric` + Adaptive `RubricMetric`), `User Simulation` (`generate_conversation_scenarios`), `Automatic Loss Clusters` (`generate_loss_clusters`), `EvaluationExperiment` / `EvaluationRun`, `OnlineEvaluator` + `Cloud Monitoring` Drift Alerts | OpenTelemetry GenAI v1.39+ (`EVENT_ONLY` trace spans) & GitHub Actions / Cloud Build CI Ship Gate | Ready |
 
 ---
 
@@ -59,9 +58,9 @@ gcp-agentic-ai-samples/
 
 ---
 
-## Adding a New Demo or Snippet
+## Adding a New Sample or Snippet
 
-1. Copy [`demos/_template-snippet/`](./demos/_template-snippet/) to a new numbered directory (for example, `demos/02-cloud-run-streamable-http-mcp/`).
+1. Copy [`_template-sample/`](./_template-sample/) to a new numbered top-level directory (for example, `03-cloud-run-streamable-http-mcp/`).
 2. Keep all project, region, and organization identifiers parameterized via environment variables or `terraform.tfvars.example` (`YOUR_PROJECT_ID`, `YOUR_ORG_ID`).
 3. Ensure `.gitignore`, `.dockerignore`, and `.gcloudignore` exclude `.env*` and local credential artifacts, and run all containers as a non-root user with a dedicated least-privilege Service Account.
-4. Document the architecture, authentication flow, verification commands, and operational gotchas in the demo's `README.md`, then add an entry to the catalog table above.
+4. Document the architecture, authentication flow, verification commands, and operational gotchas in the sample's `README.md`, then add an entry to the catalog table above.

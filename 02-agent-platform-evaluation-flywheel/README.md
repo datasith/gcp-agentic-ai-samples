@@ -1,4 +1,4 @@
-# Demo 02: Agent Platform Evaluation & Continuous Quality Flywheel (ADK)
+# Sample 02: Agent Platform Evaluation & Continuous Quality Flywheel (ADK)
 
 This reference sample implements a clean, end-to-end **Agent Evaluation & Continuous Quality Flywheel** built on **Gemini Enterprise Agent Platform Evaluations (`agentplatform.Client.evals`)**, **Google Agent Development Kit (`google-adk`, `gemini-3.8-flash`)**, **Vertex AI Agent Runtime (`reasoningEngines`)**, **OpenTelemetry GenAI v1.39+**, and **Terraform**.
 
@@ -82,7 +82,7 @@ export GCP_REGION="us-central1"
 ### Step 1: Provision Least-Privilege IAM, Artifact Bucket & Drift Alert via Terraform
 
 ```bash
-cd demos/02-agent-platform-evaluation-flywheel/terraform
+cd 02-agent-platform-evaluation-flywheel/terraform
 cp terraform.tfvars.example terraform.tfvars
 # Edit terraform.tfvars and set project_id = "YOUR_PROJECT_ID"
 

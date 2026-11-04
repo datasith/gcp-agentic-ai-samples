@@ -1,4 +1,4 @@
-# Demo 01: Cross-Platform 3P Agent <-> GCP Agent Runtime Interoperability
+# Sample 01: Cross-Platform 3P Agent <-> GCP Agent Runtime Interoperability
 
 This reference implementation demonstrates end-to-end, bidirectional interoperability between an **external third-party (3P) agent** hosted outside Google Cloud and an **ADK orchestrator agent** hosted on **Google Cloud Agent Runtime (`reasoningEngines`)**, using **Terraform**, **ADK (`gemini-3.8-flash`)**, **A2A over HTTP+JSON**, **IAM Workload Identity Federation (WIF)**, **Agent Registry**, **Agent Identity Auth Manager**, and **dual-mode Agent Gateway (`CLIENT_TO_AGENT` + `AGENT_TO_ANYWHERE`)**.
 
