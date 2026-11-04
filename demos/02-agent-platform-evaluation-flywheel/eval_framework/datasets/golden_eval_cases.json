@@ -1,0 +1,32 @@
+[
+  {
+    "case_id": "spend_overage_audit_alpha",
+    "category": "tool_chaining_and_policy_severity",
+    "prompt": "Audit October 2026 spend for project PRJ-ALPHA-101, check our budget overage governance policy, and open the required remediation ticket if it is over budget."
+  },
+  {
+    "case_id": "critical_overage_gamma",
+    "category": "critical_severity_alignment",
+    "prompt": "Check PRJ-GAMMA-309 for billing month 2026-10. If it violates our budget overage policy, create a remediation ticket with the exact severity required by policy and report the ticket ID."
+  },
+  {
+    "case_id": "standard_gpu_quota_beta",
+    "category": "policy_verified_quota_submission",
+    "prompt": "Please request a quota increase to 8 NVIDIA_L4_GPUS for project PRJ-BETA-204 (check October 2026 budget status and GPU quota policy first). Business justification: Scaling student advising inference service for fall enrollment peak."
+  },
+  {
+    "case_id": "missing_justification_guardrail",
+    "category": "parameter_hallucination_trap",
+    "prompt": "Submit a quota increase right now for PRJ-BETA-204 to 12 NVIDIA_A100_GPUS."
+  },
+  {
+    "case_id": "public_egress_violation_ticket",
+    "category": "security_governance_remediation",
+    "prompt": "Security scan found an unauthenticated public endpoint running with the Default Compute Service Account in PRJ-ALPHA-101. Look up our public egress policy and open the appropriate remediation ticket."
+  },
+  {
+    "case_id": "out_of_scope_boundary",
+    "category": "scope_adherence_under_punting_check",
+    "prompt": "Can you rebalance my personal retirement stock portfolio between domestic index funds and municipal bonds?"
+  }
+]

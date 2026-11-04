@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="890" viewBox="0 0 1440 890" content="&lt;mxfile host=&quot;Electron&quot; modified=&quot;2026-11-04T10:35:00.000Z&quot; agent=&quot;GCP-Agentic-AI-Samples&quot; version=&quot;24.7.0&quot; type=&quot;device&quot;&gt;
+  &lt;diagram id=&quot;demo02-eval-flywheel&quot; name=&quot;Agent Platform Evaluation &amp;amp; Quality Flywheel&quot;&gt;
+    &lt;mxGraphModel dx=&quot;1440&quot; dy=&quot;900&quot; grid=&quot;1&quot; gridSize=&quot;10&quot; guides=&quot;1&quot; tooltips=&quot;1&quot; connect=&quot;1&quot; arrows=&quot;1&quot; fold=&quot;1&quot; page=&quot;1&quot; pageScale=&quot;1&quot; pageWidth=&quot;1440&quot; pageHeight=&quot;900&quot; background=&quot;#F8F9FA&quot; math=&quot;0&quot; shadow=&quot;0&quot;&gt;
+      &lt;root&gt;
+        &lt;mxCell id=&quot;0&quot; /&gt;
+        &lt;mxCell id=&quot;1&quot; parent=&quot;0&quot; /&gt;
+
+        &lt;!-- Zone 1: ADK Agent Under Test --&gt;
+        &lt;mxCell id=&quot;zone1&quot; value=&quot;1. ADK Agent System Under Test (us-central1 + Global Gemini 3.8)&quot; style=&quot;swimlane;startSize=36;fillColor=#E8F0FE;strokeColor=#1A73E8;fontColor=#174EA6;fontStyle=1;fontSize=13;rounded=1;arcSize=4;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;
+          &lt;mxGeometry x=&quot;30&quot; y=&quot;90&quot; width=&quot;320&quot; height=&quot;720&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z1_agent&quot; value=&quot;finops_governance_agent (ADK 2.13)&amp;#xa;• Model: gemini-3.8-flash (global endpoint)&amp;#xa;• Profiles: v1_baseline vs. v2_optimized&amp;#xa;• Deployed on ReasoningEngine (us-central1)&amp;#xa;• Dedicated SA: adk-eval-runtime-sa&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#1A73E8;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone1&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;55&quot; width=&quot;280&quot; height=&quot;145&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z1_tools&quot; value=&quot;Deterministic Enterprise Tools&amp;#xa;1. get_project_spend(project_code, month)&amp;#xa;2. lookup_governance_policy(domain)&amp;#xa;3. submit_quota_increase_request(...)&amp;#xa;4. create_remediation_ticket(...)&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#DADCE0;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone1&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;225&quot; width=&quot;280&quot; height=&quot;150&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z1_otel&quot; value=&quot;OpenTelemetry GenAI v1.39.0 Signals&amp;#xa;• OTEL_SEMCONV_STABILITY_OPT_IN =&amp;#xa;  gen_ai_latest_experimental&amp;#xa;• CAPTURE_MESSAGE_CONTENT = EVENT_ONLY&amp;#xa;• Exports spans &amp;amp; inference events to&amp;#xa;  Cloud Trace &amp;amp; Cloud Logging&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FEF7E0;strokeColor=#B06000;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone1&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;400&quot; width=&quot;280&quot; height=&quot;160&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z1_local&quot; value=&quot;Inner-Loop Developer Smoke Check&amp;#xa;• adk eval adk_agent adk_local_smoke.test.json&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#0D652D;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone1&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;585&quot; width=&quot;280&quot; height=&quot;95&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+
+        &lt;!-- Zone 2: Scenario Generation &amp; Inference --&gt;
+        &lt;mxCell id=&quot;zone2&quot; value=&quot;2. Cold-Start User Simulation &amp;amp; Trace Capture (agentplatform.Client.evals)&quot; style=&quot;swimlane;startSize=36;fillColor=#E6F4EA;strokeColor=#137333;fontColor=#0D652D;fontStyle=1;fontSize=13;rounded=1;arcSize=4;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;
+          &lt;mxGeometry x=&quot;400&quot; y=&quot;90&quot; width=&quot;580&quot; height=&quot;330&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z2_sim&quot; value=&quot;A. Synthetic Scenario Generation (Zero Hand-Written Data Needed)&amp;#xa;• AgentInfo.load_from_agent(root_agent)&amp;#xa;• client.evals.generate_conversation_scenarios(count, generation_instruction, environment_context)&amp;#xa;• Produces Starting Prompts + Hidden User Simulator Conversation Plans&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone2&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;55&quot; width=&quot;540&quot; height=&quot;115&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z2_inf&quot; value=&quot;B. Curated Golden Regression + Multi-Turn User Simulator Inference&amp;#xa;• golden_eval_cases.json (spend audits, policy severity, missing-arg traps, scope boundaries)&amp;#xa;• client.evals.run_inference(src=..., agent=LlmAgent | ReasoningEngine, user_simulator_config={max_turn: 4})&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone2&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;190&quot; width=&quot;540&quot; height=&quot;115&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+
+        &lt;!-- Zone 3: Metric Registry, Autoraters &amp; Loss Clusters --&gt;
+        &lt;mxCell id=&quot;zone3&quot; value=&quot;3. Metric Registry, Rubric Autoraters &amp;amp; Automatic Loss Cluster Analysis&quot; style=&quot;swimlane;startSize=36;fillColor=#F3E8FD;strokeColor=#9334E6;fontColor=#681DA8;fontStyle=1;fontSize=13;rounded=1;arcSize=4;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;
+          &lt;mxGeometry x=&quot;400&quot; y=&quot;445&quot; width=&quot;580&quot; height=&quot;365&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z3_prebuilt&quot; value=&quot;Predefined Single-Turn &amp;amp; Multi-Turn RubricMetrics&amp;#xa;• Single-Turn: FINAL_RESPONSE_QUALITY, TOOL_USE_QUALITY, HALLUCINATION, SAFETY&amp;#xa;• Multi-Turn: MULTI_TURN_TASK_SUCCESS, MULTI_TURN_TOOL_USE_QUALITY, MULTI_TURN_TRAJECTORY_QUALITY&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#9334E6;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone3&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;50&quot; width=&quot;540&quot; height=&quot;90&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z3_custom&quot; value=&quot;Reusable Custom Metrics in Agent Platform Metric Registry (evaluationMetrics/*)&amp;#xa;• Custom LLMMetric: finops_policy_citation_compliance (verifies authoritative POL-* citations)&amp;#xa;• Custom CodeExecutionMetric: finops_audit_id_format_hygiene (deterministic QTA-*/REM-* validator)&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone3&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;155&quot; width=&quot;540&quot; height=&quot;90&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z3_loss&quot; value=&quot;Automatic Loss Cluster Analysis (Global Endpoint) &amp;amp; Managed EvaluationRun&amp;#xa;• global_client.evals.generate_loss_clusters() groups failures into taxonomy patterns&amp;#xa;• client.evals.create_evaluation_run() + EvaluationExperiment persisted to GCS &amp;amp; Cloud Console&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FEF7E0;strokeColor=#B06000;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone3&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;260&quot; width=&quot;540&quot; height=&quot;85&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+
+        &lt;!-- Zone 4: CI/CD Gate &amp; Continuous Online Monitoring --&gt;
+        &lt;mxCell id=&quot;zone4&quot; value=&quot;4. CI/CD Ship Gate &amp;amp; Continuous Production Drift Monitoring&quot; style=&quot;swimlane;startSize=36;fillColor=#FEF7E0;strokeColor=#B06000;fontColor=#B06000;fontStyle=1;fontSize=13;rounded=1;arcSize=4;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;
+          &lt;mxGeometry x=&quot;1030&quot; y=&quot;90&quot; width=&quot;380&quot; height=&quot;720&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z4_gate&quot; value=&quot;Deterministic CI/CD Quality Gate&amp;#xa;• Compares v1_baseline -&amp;gt; v2_optimized lift&amp;#xa;• Enforces min thresholds on Response Quality,&amp;#xa;  Tool Use Quality, and Safety&amp;#xa;• Emits scorecard.json + scorecard.md&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone4&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;55&quot; width=&quot;340&quot; height=&quot;175&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z4_online&quot; value=&quot;Continuous OnlineEvaluator (v1beta1)&amp;#xa;• Attached to ReasoningEngine resource&amp;#xa;• Samples Cloud Trace &amp;amp; Logging every 10 min&amp;#xa;• Evaluates live production OTel v1.39.0 traces&amp;#xa;  asynchronously via Vertex AI P4SA&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#1A73E8;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone4&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;260&quot; width=&quot;340&quot; height=&quot;195&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;z4_alert&quot; value=&quot;Cloud Monitoring Quality Drift Alert Policy&amp;#xa;• Resource: aiplatform.googleapis.com/OnlineEvaluator&amp;#xa;• Metric: aiplatform.googleapis.com/online_evaluator/scores&amp;#xa;• Aligner: ALIGN_PERCENTILE_50 &amp;lt; 0.80 (DELTA DISTRIBUTION)&amp;#xa;• Triggers automated drift incident&quot; style=&quot;rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#B06000;fontColor=#202124;fontSize=11;&quot; vertex=&quot;1&quot; parent=&quot;zone4&quot;&gt;
+          &lt;mxGeometry x=&quot;20&quot; y=&quot;485&quot; width=&quot;340&quot; height=&quot;195&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+
+        &lt;!-- Edges --&gt;
+        &lt;mxCell id=&quot;e1&quot; value=&quot;1. AgentInfo + Inferences&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#137333;strokeWidth=2;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;z1_agent&quot; target=&quot;z2_sim&quot;&gt;
+          &lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;e2&quot; value=&quot;2. Captured Traces&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9334E6;strokeWidth=2;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;z2_inf&quot; target=&quot;z3_prebuilt&quot;&gt;
+          &lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;e3&quot; value=&quot;3. Verdicts &amp;amp; Loss Clusters&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#137333;strokeWidth=2;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;z3_loss&quot; target=&quot;z4_gate&quot;&gt;
+          &lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;e4&quot; value=&quot;4. Live OTel Spans&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#B06000;strokeWidth=2;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;z1_otel&quot; target=&quot;z4_online&quot;&gt;
+          &lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+        &lt;mxCell id=&quot;e5&quot; value=&quot;5. Score Distribution&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#B06000;strokeWidth=2;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;z4_online&quot; target=&quot;z4_alert&quot;&gt;
+          &lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot; /&gt;
+        &lt;/mxCell&gt;
+      &lt;/root&gt;
+    &lt;/mxGraphModel&gt;
+  &lt;/diagram&gt;
+&lt;/mxfile&gt;" style="background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;">
+  <defs>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1a73e8"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#137333"/>
+    </marker>
+    <marker id="arr-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#9334e6"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#b06000"/>
+    </marker>
+    <filter id="shadow" x="-2%" y="-2%" width="104%" height="106%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.07"/>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1440" height="890" fill="#f8f9fa"/>
+
+  <!-- Header -->
+  <rect x="30" y="20" width="1380" height="58" rx="10" fill="#ffffff" stroke="#dadce0" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="54" y="46" fill="#1a73e8" font-size="19" font-weight="700">Gemini Enterprise Agent Platform — End-to-End Agent Evaluation &amp; Quality Flywheel</text>
+  <text x="54" y="66" fill="#5f6368" font-size="12">ADK 2.13 (gemini-3.8-flash)  |  agentplatform.Client.evals  |  User Simulation  |  Metric Registry  |  Loss Clusters  |  OnlineEvaluator + Drift Alerts</text>
+
+  <!-- ZONE 1: ADK Agent Under Test -->
+  <rect x="30" y="96" width="330" height="724" rx="12" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="30" y="96" width="330" height="38" rx="12" fill="#1a73e8"/>
+  <rect x="30" y="120" width="330" height="14" fill="#1a73e8"/>
+  <text x="195" y="120" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">1. ADK Agent System Under Test</text>
+
+  <!-- Box 1A -->
+  <rect x="48" y="150" width="294" height="162" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="1.5"/>
+  <rect x="48" y="150" width="294" height="26" rx="8" fill="#d2e3fc"/>
+  <text x="195" y="168" fill="#174ea6" font-size="11.5" font-weight="700" text-anchor="middle">ReasoningEngine (us-central1)</text>
+  <text x="60" y="192" fill="#202124" font-size="11" font-weight="600">Agent: finops_governance_agent</text>
+  <text x="60" y="211" fill="#3c4043" font-size="10.5">• Model: <tspan font-family="monospace" fill="#1a73e8">gemini-3.8-flash</tspan> (global endpoint)</text>
+  <text x="60" y="229" fill="#3c4043" font-size="10.5">• Prompt A/B Profiles:</text>
+  <text x="72" y="246" fill="#b06000" font-size="10" font-family="monospace">v1_baseline (naive -&gt; triggers loss clusters)</text>
+  <text x="72" y="262" fill="#137333" font-size="10" font-family="monospace">v2_optimized (policy-grounded production)</text>
+  <text x="60" y="281" fill="#3c4043" font-size="10.5">• Dedicated SA: <tspan font-family="monospace">adk-eval-runtime-sa</tspan></text>
+  <text x="60" y="298" fill="#5f6368" font-size="10">• Zero-skew <tspan font-family="monospace">clone()</tspan> + deferred <tspan font-family="monospace">set_up()</tspan></text>
+
+  <!-- Box 1B -->
+  <rect x="48" y="328" width="294" height="156" rx="8" fill="#ffffff" stroke="#dadce0" stroke-width="1.5"/>
+  <rect x="48" y="328" width="294" height="26" rx="8" fill="#e8eaed"/>
+  <text x="195" y="346" fill="#202124" font-size="11.5" font-weight="700" text-anchor="middle">Deterministic Domain Tools</text>
+  <text x="60" y="370" fill="#1a73e8" font-size="10.5" font-family="monospace" font-weight="600">1. get_project_spend(code, month)</text>
+  <text x="60" y="392" fill="#1a73e8" font-size="10.5" font-family="monospace" font-weight="600">2. lookup_governance_policy(domain)</text>
+  <text x="72" y="408" fill="#5f6368" font-size="10">POL-FIN-001 | POL-GPU-002 | POL-SEC-003</text>
+  <text x="60" y="429" fill="#1a73e8" font-size="10.5" font-family="monospace" font-weight="600">3. submit_quota_increase_request(...)</text>
+  <text x="60" y="451" fill="#1a73e8" font-size="10.5" font-family="monospace" font-weight="600">4. create_remediation_ticket(...)</text>
+  <text x="72" y="468" fill="#5f6368" font-size="10">Deterministic QTA-XXXXXX &amp; REM-XXXXXX IDs</text>
+
+  <!-- Box 1C -->
+  <rect x="48" y="500" width="294" height="175" rx="8" fill="#fef7e0" stroke="#b06000" stroke-width="1.5"/>
+  <rect x="48" y="500" width="294" height="26" rx="8" fill="#fde293"/>
+  <text x="195" y="518" fill="#b06000" font-size="11.5" font-weight="700" text-anchor="middle">OpenTelemetry GenAI v1.39+ Signals</text>
+  <text x="60" y="542" fill="#202124" font-size="10" font-family="monospace">OTEL_SEMCONV_STABILITY_OPT_IN=</text>
+  <text x="68" y="556" fill="#b06000" font-size="10" font-family="monospace" font-weight="600">'gen_ai_latest_experimental'</text>
+  <text x="60" y="576" fill="#202124" font-size="10" font-family="monospace">OTEL_INSTRUMENTATION_GENAI_</text>
+  <text x="68" y="590" fill="#b06000" font-size="10" font-family="monospace" font-weight="600">CAPTURE_MESSAGE_CONTENT='EVENT_ONLY'</text>
+  <text x="60" y="614" fill="#3c4043" font-size="10.5">• Emits <tspan font-family="monospace">gen_ai.agent.name</tspan> &amp; session spans</text>
+  <text x="60" y="632" fill="#3c4043" font-size="10.5">• Exports inference events to Cloud Trace</text>
+  <text x="60" y="650" fill="#3c4043" font-size="10.5">  &amp; Cloud Logging for OnlineEvaluator</text>
+
+  <!-- Box 1D -->
+  <rect x="48" y="692" width="294" height="106" rx="8" fill="#ffffff" stroke="#137333" stroke-width="1.5"/>
+  <rect x="48" y="692" width="294" height="26" rx="8" fill="#ceead6"/>
+  <text x="195" y="710" fill="#0d652d" font-size="11.5" font-weight="700" text-anchor="middle">Inner-Loop Developer CLI</text>
+  <text x="60" y="735" fill="#3c4043" font-size="10.5">• Rapid local trajectory smoke check:</text>
+  <text x="60" y="754" fill="#0d652d" font-size="10" font-family="monospace">adk eval adk_agent \</text>
+  <text x="68" y="770" fill="#0d652d" font-size="10" font-family="monospace">adk_local_smoke.test.json</text>
+
+  <!-- ZONE 2: Simulation & Trace Capture -->
+  <rect x="415" y="96" width="560" height="320" rx="12" fill="#e6f4ea" stroke="#137333" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="415" y="96" width="560" height="36" rx="12" fill="#137333"/>
+  <rect x="415" y="120" width="560" height="12" fill="#137333"/>
+  <text x="695" y="119" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">2. Cold-Start User Simulation &amp; Golden Trace Capture (agentplatform.Client.evals)</text>
+
+  <!-- Box 2A -->
+  <rect x="435" y="146" width="520" height="122" rx="8" fill="#ffffff" stroke="#137333" stroke-width="1.5"/>
+  <circle cx="456" cy="166" r="11" fill="#137333"/>
+  <text x="456" y="170" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">A</text>
+  <text x="475" y="170" fill="#0d652d" font-size="12" font-weight="700">Synthetic Scenario Generation (Cold-Start Testing)</text>
+  <text x="448" y="191" fill="#3c4043" font-size="11">• Introspects agent instructions &amp; tool schemas via <tspan font-family="monospace">AgentInfo.load_from_agent(root_agent)</tspan></text>
+  <text x="448" y="210" fill="#3c4043" font-size="11">• <tspan font-family="monospace">client.evals.generate_conversation_scenarios(..., allow_cross_region_model=True)</tspan></text>
+  <text x="448" y="229" fill="#3c4043" font-size="11">• Generates realistic Starting Prompts + hidden multi-turn User Simulator Conversation Plans</text>
+  <text x="448" y="248" fill="#0d652d" font-size="10.5" font-weight="600">Use agentplatform.Client (vertexai.Client is deprecated in google-cloud-aiplatform &gt;= 2.7.0).</text>
+
+  <!-- Box 2B -->
+  <rect x="435" y="280" width="520" height="122" rx="8" fill="#ffffff" stroke="#137333" stroke-width="1.5"/>
+  <circle cx="456" cy="300" r="11" fill="#137333"/>
+  <text x="456" y="304" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">B</text>
+  <text x="475" y="304" fill="#0d652d" font-size="12" font-weight="700">Golden Regression + Multi-Turn User Simulator Inference</text>
+  <text x="448" y="325" fill="#3c4043" font-size="11">• Curated <tspan font-family="monospace">golden_eval_cases.json</tspan> (spend audits, severity rules, missing-justification traps)</text>
+  <text x="448" y="344" fill="#3c4043" font-size="11">• <tspan font-family="monospace">client.evals.run_inference(src=..., agent=LlmAgent | ReasoningEngine)</tspan></text>
+  <text x="448" y="363" fill="#3c4043" font-size="11">• Multi-turn User Simulator roleplays follow-ups (<tspan font-family="monospace">user_simulator_config: max_turn=4</tspan>)</text>
+  <text x="448" y="382" fill="#3c4043" font-size="11">• Captures immutable <tspan font-family="monospace">intermediate_events</tspan> (tool calls, args, outputs) + final responses</text>
+
+  <!-- ZONE 3: Metric Registry & Loss Clusters -->
+  <rect x="415" y="434" width="560" height="386" rx="12" fill="#f3e8fd" stroke="#9334e6" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="415" y="434" width="560" height="36" rx="12" fill="#9334e6"/>
+  <rect x="415" y="458" width="560" height="12" fill="#9334e6"/>
+  <text x="695" y="457" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">3. Metric Registry, Rubric Autoraters &amp; Loss Cluster Triage</text>
+
+  <!-- Box 3A -->
+  <rect x="435" y="484" width="520" height="104" rx="8" fill="#ffffff" stroke="#9334e6" stroke-width="1.5"/>
+  <circle cx="456" cy="503" r="11" fill="#9334e6"/>
+  <text x="456" y="507" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">1</text>
+  <text x="475" y="507" fill="#681da8" font-size="12" font-weight="700">Google-Managed Adaptive &amp; Static RubricMetrics</text>
+  <text x="448" y="528" fill="#3c4043" font-size="10.5">• <tspan font-weight="600">Single-Turn:</tspan> <tspan font-family="monospace">FINAL_RESPONSE_QUALITY</tspan>, <tspan font-family="monospace">TOOL_USE_QUALITY</tspan>, <tspan font-family="monospace">HALLUCINATION</tspan>, <tspan font-family="monospace">SAFETY</tspan></text>
+  <text x="448" y="547" fill="#3c4043" font-size="10.5">• <tspan font-weight="600">Multi-Turn:</tspan> <tspan font-family="monospace">MULTI_TURN_TASK_SUCCESS</tspan>, <tspan font-family="monospace">MULTI_TURN_TOOL_USE_QUALITY</tspan>, <tspan font-family="monospace">MULTI_TURN_TRAJECTORY_QUALITY</tspan></text>
+  <text x="448" y="566" fill="#681da8" font-size="10.5">Adaptive rubrics auto-tailor pass/fail checks per prompt + AgentInfo; Hallucination verifies atomic claims vs tool outputs.</text>
+
+  <!-- Box 3B -->
+  <rect x="435" y="598" width="520" height="98" rx="8" fill="#ffffff" stroke="#137333" stroke-width="1.5"/>
+  <circle cx="456" cy="617" r="11" fill="#137333"/>
+  <text x="456" y="621" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">2</text>
+  <text x="475" y="621" fill="#0d652d" font-size="12" font-weight="700">Reusable Custom Metrics in Metric Registry (evaluationMetrics/*)</text>
+  <text x="448" y="642" fill="#3c4043" font-size="10.5">• <tspan font-weight="600">Custom LLMMetric:</tspan> <tspan font-family="monospace">finops_policy_citation_compliance</tspan> (verifies POL-* policy ID citations)</text>
+  <text x="448" y="661" fill="#3c4043" font-size="10.5">• <tspan font-weight="600">Custom CodeExecutionMetric:</tspan> <tspan font-family="monospace">finops_audit_id_format_hygiene</tspan> (deterministic QTA-*/REM-* regex check)</text>
+  <text x="448" y="680" fill="#0d652d" font-size="10.5">Registered once via <tspan font-family="monospace">client.evals.create_evaluation_metric()</tspan>; reused across CI runs &amp; experiments.</text>
+
+  <!-- Box 3C -->
+  <rect x="435" y="706" width="520" height="100" rx="8" fill="#fef7e0" stroke="#b06000" stroke-width="1.5"/>
+  <circle cx="456" cy="725" r="11" fill="#b06000"/>
+  <text x="456" y="729" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">3</text>
+  <text x="475" y="729" fill="#b06000" font-size="12" font-weight="700">Automatic Loss Cluster Analysis &amp; Managed EvaluationRun</text>
+  <text x="448" y="750" fill="#3c4043" font-size="10.5">• <tspan font-family="monospace">global_client.evals.generate_loss_clusters()</tspan> groups failures into Google Loss Taxonomies</text>
+  <text x="448" y="768" fill="#3c4043" font-size="10.5">• <tspan font-family="monospace">client.evals.create_evaluation_run()</tspan> + <tspan font-family="monospace">EvaluationExperiment</tspan> persisted to GCS &amp; Console UI</text>
+  <text x="448" y="787" fill="#b06000" font-size="10.5" font-weight="600">Gotcha: generate_loss_clusters() is global-only; initialize a separate Client(location="global").</text>
+
+  <!-- ZONE 4: CI/CD Gate & Online Monitoring -->
+  <rect x="1030" y="96" width="380" height="724" rx="12" fill="#fef7e0" stroke="#b06000" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="1030" y="96" width="380" height="38" rx="12" fill="#b06000"/>
+  <rect x="1030" y="120" width="380" height="14" fill="#b06000"/>
+  <text x="1220" y="120" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">4. CI/CD Gate &amp; Continuous Drift Monitors</text>
+
+  <!-- Box 4A -->
+  <rect x="1048" y="152" width="344" height="196" rx="8" fill="#ffffff" stroke="#137333" stroke-width="1.5"/>
+  <rect x="1048" y="152" width="344" height="28" rx="8" fill="#137333"/>
+  <text x="1220" y="170" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Deterministic CI/CD Ship Gate</text>
+  <text x="1060" y="196" fill="#202124" font-size="11" font-weight="600">v1_baseline -&gt; v2_optimized Flywheel Lift</text>
+  <text x="1060" y="216" fill="#3c4043" font-size="10.5">• Blocks PR / rollout (exit code 1) if:</text>
+  <text x="1072" y="234" fill="#0d652d" font-size="10" font-family="monospace">final_response_quality &lt; 0.75</text>
+  <text x="1072" y="250" fill="#0d652d" font-size="10" font-family="monospace">tool_use_quality       &lt; 0.75</text>
+  <text x="1072" y="266" fill="#0d652d" font-size="10" font-family="monospace">safety                 &lt; 0.95</text>
+  <text x="1060" y="288" fill="#3c4043" font-size="10.5">• Emits <tspan font-family="monospace">scorecard.json</tspan> + <tspan font-family="monospace">scorecard.md</tspan></text>
+  <text x="1060" y="308" fill="#3c4043" font-size="10.5">• Compatible with <tspan font-family="monospace">adk optimize</tspan> (GEPA) loop</text>
+  <text x="1060" y="328" fill="#5f6368" font-size="10">• Artifacts stored in <tspan font-family="monospace">gs://PROJECT-agent-eval-flywheel</tspan></text>
+
+  <!-- Box 4B -->
+  <rect x="1048" y="368" width="344" height="202" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="1.5"/>
+  <rect x="1048" y="368" width="344" height="28" rx="8" fill="#1a73e8"/>
+  <text x="1220" y="386" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Continuous OnlineEvaluator (Production)</text>
+  <text x="1060" y="412" fill="#202124" font-size="11" font-weight="600">Resource: onlineEvaluators/* (v1beta1)</text>
+  <text x="1060" y="432" fill="#3c4043" font-size="10.5">• Bound to deployed <tspan font-family="monospace">ReasoningEngine</tspan></text>
+  <text x="1060" y="451" fill="#3c4043" font-size="10.5">• Scheduled loop every <tspan font-weight="600">10 minutes</tspan>:</text>
+  <text x="1072" y="469" fill="#3c4043" font-size="10">1. Queries Cloud Trace &amp; Cloud Logging</text>
+  <text x="1072" y="485" fill="#3c4043" font-size="10">2. Scores sampled OTel v1.39.0 traces</text>
+  <text x="1072" y="501" fill="#3c4043" font-size="10">3. Exports scores to Cloud Monitoring</text>
+  <text x="1060" y="523" fill="#3c4043" font-size="10.5">• Cost cap: <tspan font-family="monospace">maxEvaluatedSamplesPerRun = 20</tspan></text>
+  <text x="1060" y="543" fill="#174ea6" font-size="10">• P4SA roles: <tspan font-family="monospace">cloudtrace.user</tspan>, <tspan font-family="monospace">logging.viewer</tspan></text>
+
+  <!-- Box 4C -->
+  <rect x="1048" y="590" width="344" height="208" rx="8" fill="#ffffff" stroke="#b06000" stroke-width="1.5"/>
+  <rect x="1048" y="590" width="344" height="28" rx="8" fill="#b06000"/>
+  <text x="1220" y="608" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle">Cloud Monitoring Quality Drift Alert</text>
+  <text x="1060" y="634" fill="#202124" font-size="11" font-weight="600">Terraform: google_monitoring_alert_policy</text>
+  <text x="1060" y="654" fill="#3c4043" font-size="10.5">• Monitored Resource:</text>
+  <text x="1070" y="670" fill="#b06000" font-size="10" font-family="monospace">aiplatform.googleapis.com/OnlineEvaluator</text>
+  <text x="1060" y="690" fill="#3c4043" font-size="10.5">• Metric Type (DELTA DISTRIBUTION):</text>
+  <text x="1070" y="706" fill="#b06000" font-size="10" font-family="monospace">aiplatform.googleapis.com/online_evaluator/scores</text>
+  <text x="1060" y="728" fill="#3c4043" font-size="10.5">• Aligner: <tspan font-family="monospace" font-weight="600">ALIGN_PERCENTILE_50 &lt; 0.80</tspan></text>
+  <text x="1060" y="748" fill="#b06000" font-size="10" font-weight="600">Gotcha: ALIGN_MEAN is rejected for DISTRIBUTION</text>
+  <text x="1060" y="764" fill="#b06000" font-size="10" font-weight="600">metrics; use ALIGN_PERCENTILE_50 in Terraform.</text>
+
+  <!-- ARROWS -->
+  <!-- 1: Agent -> Simulation -->
+  <path d="M 342 210 L 430 210" fill="none" stroke="#137333" stroke-width="2.5" marker-end="url(#arr-green)"/>
+  <rect x="348" y="182" width="78" height="22" rx="4" fill="#e6f4ea" stroke="#137333" stroke-width="1"/>
+  <text x="387" y="197" fill="#0d652d" font-size="9.5" font-weight="700" text-anchor="middle">1. AgentInfo</text>
+
+  <!-- 2: Agent <-> Inference -->
+  <path d="M 342 340 L 430 340" fill="none" stroke="#1a73e8" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+  <rect x="348" y="312" width="78" height="22" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1"/>
+  <text x="387" y="327" fill="#174ea6" font-size="9.5" font-weight="700" text-anchor="middle">2. Traces</text>
+
+  <!-- 3: Inference -> Evaluators -->
+  <path d="M 695 402 L 695 480" fill="none" stroke="#9334e6" stroke-width="2.5" marker-end="url(#arr-purple)"/>
+  <rect x="704" y="420" width="96" height="20" rx="4" fill="#f3e8fd" stroke="#9334e6" stroke-width="1"/>
+  <text x="752" y="434" fill="#681da8" font-size="9.5" font-weight="700" text-anchor="middle">3. Score Traces</text>
+
+  <!-- 4: Evaluators -> Ship Gate -->
+  <path d="M 955 540 L 1000 540 L 1000 250 L 1043 250" fill="none" stroke="#137333" stroke-width="2.5" marker-end="url(#arr-green)"/>
+  <rect x="962" y="295" width="76" height="32" rx="4" fill="#e6f4ea" stroke="#137333" stroke-width="1"/>
+  <text x="1000" y="309" fill="#0d652d" font-size="9.5" font-weight="700" text-anchor="middle">4. Verdicts</text>
+  <text x="1000" y="321" fill="#0d652d" font-size="9.5" font-weight="700" text-anchor="middle">&amp; Clusters</text>
+
+  <!-- 5: OTel -> OnlineEvaluator -->
+  <path d="M 342 615 L 392 615 L 392 828 L 1012 828 L 1012 470 L 1043 470" fill="none" stroke="#b06000" stroke-width="2.2" stroke-dasharray="6,3" marker-end="url(#arr-amber)"/>
+  <rect x="615" y="816" width="170" height="22" rx="4" fill="#fef7e0" stroke="#b06000" stroke-width="1"/>
+  <text x="700" y="831" fill="#b06000" font-size="10" font-weight="700" text-anchor="middle">5. Live Cloud Trace OTel Spans</text>
+
+  <!-- 6: OnlineEvaluator -> Drift Alert -->
+  <path d="M 1220 570 L 1220 586" fill="none" stroke="#b06000" stroke-width="2.5" marker-end="url(#arr-amber)"/>
+
+  <!-- Footer Legend -->
+  <rect x="30" y="844" width="1380" height="36" rx="8" fill="#ffffff" stroke="#dadce0" stroke-width="1"/>
+  <circle cx="55" cy="862" r="6" fill="#1a73e8"/>
+  <text x="68" y="866" fill="#202124" font-size="11" font-weight="600">ADK Runtime &amp; OnlineEvaluator</text>
+  <circle cx="320" cy="862" r="6" fill="#137333"/>
+  <text x="333" y="866" fill="#202124" font-size="11" font-weight="600">User Simulation, Custom Registry Metrics &amp; CI Ship Gate</text>
+  <circle cx="735" cy="862" r="6" fill="#9334e6"/>
+  <text x="748" y="866" fill="#202124" font-size="11" font-weight="600">Single-Turn &amp; Multi-Turn Adaptive Rubric Autoraters</text>
+  <circle cx="1115" cy="862" r="6" fill="#b06000"/>
+  <text x="1128" y="866" fill="#202124" font-size="11" font-weight="600">OTel GenAI v1.39+, Loss Clusters &amp; Drift Alerts</text>
+</svg>

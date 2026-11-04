@@ -1,0 +1,48 @@
+{
+  "eval_set_id": "finops_governance_local_smoke",
+  "name": "Local Inner-Loop ADK Trajectory Smoke Suite",
+  "description": "Fast local trajectory check compatible with `adk eval adk_agent eval_framework/datasets/adk_local_smoke.test.json`.",
+  "eval_cases": [
+    {
+      "eval_id": "lookup_spend_and_policy",
+      "conversation": [
+        {
+          "invocation_id": "turn-1",
+          "user_content": {
+            "parts": [
+              {
+                "text": "What was the October 2026 spend for PRJ-BETA-204 and what is our data residency policy ID?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "In 2026-10, PRJ-BETA-204 spent $11,200.00 against a $15,000.00 monthly budget (WITHIN_BUDGET). Our Regional Data Residency & Sovereign Storage Policy ID is POL-DATA-004."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "get_project_spend",
+                "args": {
+                  "project_code": "PRJ-BETA-204",
+                  "billing_month": "2026-10"
+                }
+              },
+              {
+                "name": "lookup_governance_policy",
+                "args": {
+                  "policy_domain": "data_residency"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

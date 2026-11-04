@@ -1,0 +1,5 @@
+project_id                 = "YOUR_PROJECT_ID"
+region                     = "us-central1"
+runtime_sa_id              = "adk-eval-runtime-sa"
+quality_drift_threshold    = 0.80
+enable_quality_drift_alert = true

@@ -1,0 +1,83 @@
+<mxfile host="Electron" modified="2026-11-04T10:35:00.000Z" agent="GCP-Agentic-AI-Samples" version="24.7.0" type="device">
+  <diagram id="demo02-eval-flywheel" name="Agent Platform Evaluation &amp; Quality Flywheel">
+    <mxGraphModel dx="1440" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1440" pageHeight="900" background="#F8F9FA" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Zone 1: ADK Agent Under Test -->
+        <mxCell id="zone1" value="1. ADK Agent System Under Test (us-central1 + Global Gemini 3.8)" style="swimlane;startSize=36;fillColor=#E8F0FE;strokeColor=#1A73E8;fontColor=#174EA6;fontStyle=1;fontSize=13;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="30" y="90" width="320" height="720" as="geometry" />
+        </mxCell>
+        <mxCell id="z1_agent" value="finops_governance_agent (ADK 2.13)&#xa;• Model: gemini-3.8-flash (global endpoint)&#xa;• Profiles: v1_baseline vs. v2_optimized&#xa;• Deployed on ReasoningEngine (us-central1)&#xa;• Dedicated SA: adk-eval-runtime-sa" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#1A73E8;fontColor=#202124;fontSize=11;" vertex="1" parent="zone1">
+          <mxGeometry x="20" y="55" width="280" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="z1_tools" value="Deterministic Enterprise Tools&#xa;1. get_project_spend(project_code, month)&#xa;2. lookup_governance_policy(domain)&#xa;3. submit_quota_increase_request(...)&#xa;4. create_remediation_ticket(...)" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#DADCE0;fontColor=#202124;fontSize=11;" vertex="1" parent="zone1">
+          <mxGeometry x="20" y="225" width="280" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="z1_otel" value="OpenTelemetry GenAI v1.39.0 Signals&#xa;• OTEL_SEMCONV_STABILITY_OPT_IN =&#xa;  gen_ai_latest_experimental&#xa;• CAPTURE_MESSAGE_CONTENT = EVENT_ONLY&#xa;• Exports spans &amp; inference events to&#xa;  Cloud Trace &amp; Cloud Logging" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FEF7E0;strokeColor=#B06000;fontColor=#202124;fontSize=11;" vertex="1" parent="zone1">
+          <mxGeometry x="20" y="400" width="280" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="z1_local" value="Inner-Loop Developer Smoke Check&#xa;• adk eval adk_agent adk_local_smoke.test.json" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#0D652D;fontSize=11;" vertex="1" parent="zone1">
+          <mxGeometry x="20" y="585" width="280" height="95" as="geometry" />
+        </mxCell>
+
+        <!-- Zone 2: Scenario Generation & Inference -->
+        <mxCell id="zone2" value="2. Cold-Start User Simulation &amp; Trace Capture (agentplatform.Client.evals)" style="swimlane;startSize=36;fillColor=#E6F4EA;strokeColor=#137333;fontColor=#0D652D;fontStyle=1;fontSize=13;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="400" y="90" width="580" height="330" as="geometry" />
+        </mxCell>
+        <mxCell id="z2_sim" value="A. Synthetic Scenario Generation (Zero Hand-Written Data Needed)&#xa;• AgentInfo.load_from_agent(root_agent)&#xa;• client.evals.generate_conversation_scenarios(count, generation_instruction, environment_context)&#xa;• Produces Starting Prompts + Hidden User Simulator Conversation Plans" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#202124;fontSize=11;" vertex="1" parent="zone2">
+          <mxGeometry x="20" y="55" width="540" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="z2_inf" value="B. Curated Golden Regression + Multi-Turn User Simulator Inference&#xa;• golden_eval_cases.json (spend audits, policy severity, missing-arg traps, scope boundaries)&#xa;• client.evals.run_inference(src=..., agent=LlmAgent | ReasoningEngine, user_simulator_config={max_turn: 4})" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#202124;fontSize=11;" vertex="1" parent="zone2">
+          <mxGeometry x="20" y="190" width="540" height="115" as="geometry" />
+        </mxCell>
+
+        <!-- Zone 3: Metric Registry, Autoraters & Loss Clusters -->
+        <mxCell id="zone3" value="3. Metric Registry, Rubric Autoraters &amp; Automatic Loss Cluster Analysis" style="swimlane;startSize=36;fillColor=#F3E8FD;strokeColor=#9334E6;fontColor=#681DA8;fontStyle=1;fontSize=13;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="400" y="445" width="580" height="365" as="geometry" />
+        </mxCell>
+        <mxCell id="z3_prebuilt" value="Predefined Single-Turn &amp; Multi-Turn RubricMetrics&#xa;• Single-Turn: FINAL_RESPONSE_QUALITY, TOOL_USE_QUALITY, HALLUCINATION, SAFETY&#xa;• Multi-Turn: MULTI_TURN_TASK_SUCCESS, MULTI_TURN_TOOL_USE_QUALITY, MULTI_TURN_TRAJECTORY_QUALITY" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#9334E6;fontColor=#202124;fontSize=11;" vertex="1" parent="zone3">
+          <mxGeometry x="20" y="50" width="540" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="z3_custom" value="Reusable Custom Metrics in Agent Platform Metric Registry (evaluationMetrics/*)&#xa;• Custom LLMMetric: finops_policy_citation_compliance (verifies authoritative POL-* citations)&#xa;• Custom CodeExecutionMetric: finops_audit_id_format_hygiene (deterministic QTA-*/REM-* validator)" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#202124;fontSize=11;" vertex="1" parent="zone3">
+          <mxGeometry x="20" y="155" width="540" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="z3_loss" value="Automatic Loss Cluster Analysis (Global Endpoint) &amp; Managed EvaluationRun&#xa;• global_client.evals.generate_loss_clusters() groups failures into taxonomy patterns&#xa;• client.evals.create_evaluation_run() + EvaluationExperiment persisted to GCS &amp; Cloud Console" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FEF7E0;strokeColor=#B06000;fontColor=#202124;fontSize=11;" vertex="1" parent="zone3">
+          <mxGeometry x="20" y="260" width="540" height="85" as="geometry" />
+        </mxCell>
+
+        <!-- Zone 4: CI/CD Gate & Continuous Online Monitoring -->
+        <mxCell id="zone4" value="4. CI/CD Ship Gate &amp; Continuous Production Drift Monitoring" style="swimlane;startSize=36;fillColor=#FEF7E0;strokeColor=#B06000;fontColor=#B06000;fontStyle=1;fontSize=13;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="90" width="380" height="720" as="geometry" />
+        </mxCell>
+        <mxCell id="z4_gate" value="Deterministic CI/CD Quality Gate&#xa;• Compares v1_baseline -&gt; v2_optimized lift&#xa;• Enforces min thresholds on Response Quality,&#xa;  Tool Use Quality, and Safety&#xa;• Emits scorecard.json + scorecard.md" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#137333;fontColor=#202124;fontSize=11;" vertex="1" parent="zone4">
+          <mxGeometry x="20" y="55" width="340" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="z4_online" value="Continuous OnlineEvaluator (v1beta1)&#xa;• Attached to ReasoningEngine resource&#xa;• Samples Cloud Trace &amp; Logging every 10 min&#xa;• Evaluates live production OTel v1.39.0 traces&#xa;  asynchronously via Vertex AI P4SA" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#1A73E8;fontColor=#202124;fontSize=11;" vertex="1" parent="zone4">
+          <mxGeometry x="20" y="260" width="340" height="195" as="geometry" />
+        </mxCell>
+        <mxCell id="z4_alert" value="Cloud Monitoring Quality Drift Alert Policy&#xa;• Resource: aiplatform.googleapis.com/OnlineEvaluator&#xa;• Metric: aiplatform.googleapis.com/online_evaluator/scores&#xa;• Aligner: ALIGN_PERCENTILE_50 &lt; 0.80 (DELTA DISTRIBUTION)&#xa;• Triggers automated drift incident" style="rounded=1;whiteSpace=wrap;html=0;align=left;spacingLeft=10;fillColor=#FFFFFF;strokeColor=#B06000;fontColor=#202124;fontSize=11;" vertex="1" parent="zone4">
+          <mxGeometry x="20" y="485" width="340" height="195" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" value="1. AgentInfo + Inferences" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#137333;strokeWidth=2;" edge="1" parent="1" source="z1_agent" target="z2_sim">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="2. Captured Traces" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9334E6;strokeWidth=2;" edge="1" parent="1" source="z2_inf" target="z3_prebuilt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="3. Verdicts &amp; Loss Clusters" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#137333;strokeWidth=2;" edge="1" parent="1" source="z3_loss" target="z4_gate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="4. Live OTel Spans" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#B06000;strokeWidth=2;" edge="1" parent="1" source="z1_otel" target="z4_online">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="5. Score Distribution" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#B06000;strokeWidth=2;" edge="1" parent="1" source="z4_online" target="z4_alert">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,4 @@
+google-cloud-aiplatform[adk,evaluation]==2.7.0
+google-adk[eval]==2.13.0
+google-genai>=2.34.0
+pandas>=2.2.0

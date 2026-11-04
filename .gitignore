@@ -9,7 +9,11 @@
 *secret*.json
 
 # Terraform
+.terraform/
+**/.terraform/
 **/.terraform/*
+.terraform.lock.hcl
+**/.terraform.lock.hcl
 *.tfstate
 *.tfstate.*
 crash.log
@@ -35,6 +39,8 @@ dist/
 build/
 *.pickle
 *.pkl
+.adk/
+**/.adk/
 
 # OS / Editor
 .DS_Store
