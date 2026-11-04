@@ -7,6 +7,7 @@ locals {
   required_apis = [
     "aiplatform.googleapis.com",
     "agentregistry.googleapis.com",
+    "agentidentity.googleapis.com",
     "iam.googleapis.com",
     "iamcredentials.googleapis.com",
     "sts.googleapis.com",
@@ -113,24 +114,22 @@ resource "google_agent_registry_service" "external_3p_agent" {
   display_name = "External 3P Course & Support Agent"
   description  = "External 3P A2A agent hosted on Hugging Face Spaces / SaaS runtime."
 
-  interfaces {
-    url              = "${trimsuffix(var.external_3p_agent_url, "/")}/a2a"
-    protocol_binding = "JSONRPC"
-  }
-
+  # Note: When agent_spec.type = "A2A_AGENT_CARD", top-level `interfaces` must be
+  # omitted—Agent Registry extracts connection details directly from the Agent Card JSON.
   agent_spec {
     type = "A2A_AGENT_CARD"
     content = jsonencode({
-      schemaVersion       = "v1"
       name                = var.external_3p_agent_id
-      displayName         = "External 3P Course & Support Agent"
       description         = "Handles external LMS course roster lookups, syllabus checks, and student support tickets."
       url                 = "${trimsuffix(var.external_3p_agent_url, "/")}/a2a"
+      version             = "1.0.0"
       preferredTransport  = "JSONRPC"
       protocolVersion     = "0.3.0"
       defaultInputModes   = ["text/plain"]
       defaultOutputModes  = ["text/plain"]
-      capabilities        = {}
+      capabilities        = {
+        streaming = false
+      }
       skills = [
         {
           id          = "course_syllabus_lookup"
@@ -184,8 +183,9 @@ resource "google_agent_registry_binding" "external_3p_binding" {
     identifier = join(":", [
       "urn",
       "agent",
+      "projects-${data.google_project.current.number}",
       "projects",
-      var.project_id,
+      data.google_project.current.number,
       "locations",
       var.region,
       "agentregistry",

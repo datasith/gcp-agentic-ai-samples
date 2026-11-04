@@ -233,7 +233,7 @@ async def a2a_endpoint(
     method = payload.get("method", "")
     params = payload.get("params") or {}
 
-    if method not in ("message/send", "tasks/send"):
+    if method not in ("message/send", "tasks/send", "SendMessage"):
         return {
             "jsonrpc": "2.0",
             "id": rpc_id,
@@ -247,12 +247,19 @@ async def a2a_endpoint(
 
     reply_text = _handle_lms_prompt(user_text)
     task_id = params.get("id") or f"task-{uuid.uuid4().hex[:10]}"
+    context_id = (
+        message.get("contextId")
+        or message.get("context_id")
+        or params.get("contextId")
+        or f"ctx-{uuid.uuid4().hex[:10]}"
+    )
 
     return {
         "jsonrpc": "2.0",
         "id": rpc_id,
         "result": {
             "id": task_id,
+            "contextId": context_id,
             "kind": "task",
             "status": {"state": "completed"},
             "artifacts": [

@@ -149,7 +149,7 @@ python3 gcp_agent_runtime/deploy_agent_engine.py \
 
 ---
 
-## 4. Ten Critical Nuances & Day-2 Operational Gotchas
+## 4. Fifteen Critical Nuances & Day-2 Operational Gotchas
 
 ### Gotcha 1: Agent Registry Is Not an Inbound Firewall
 Registering a 3P agent in **Agent Registry** (`google_agent_registry_service`) makes it discoverable for **outbound** calls from GCP and allows you to reference it in outbound IAM Unified Access Policies (`destination.agent_registry.agent.name`). It **does not** authenticate or authorize inbound calls from that 3P agent into GCP. Inbound calls must authenticate via **IAM Workload Identity Federation (WIF)** and IAM roles (`roles/aiplatform.user` or `aiplatform.reasoningEngines.query`).
@@ -185,3 +185,25 @@ In `google-adk>=1.29.0`:
 
 ### Gotcha 10: Vertex AI `part_metadata` Rejection on A2A Round-Trips
 When ADK's A2A converter (`to_a2a`) deserializes an incoming A2A message, it populates `Part.part_metadata` on message parts. The Vertex AI `generateContent` converter rejects `part_metadata` if passed directly to the model. Always attach the `_strip_part_metadata_for_vertex` `before_model_callback` (included in [`gcp_agent_runtime/agent.py`](./gcp_agent_runtime/agent.py)) so inbound A2A requests never fail with `INVALID_ARGUMENT`.
+
+### Gotcha 11: `A2A_AGENT_CARD` Registration Rejects Top-Level `interfaces` (and Strict v0.3 vs. v1.0 Schema Rules)
+When registering an external A2A agent in `google_agent_registry_service` with `agent_spec.type = "A2A_AGENT_CARD"`:
+- You **must omit** the top-level `interfaces { ... }` block on `google_agent_registry_service` (including it fails with `HTTP 400: interfaces must be empty for A2A_AGENT_CARD; provide connection details within the Agent Card content instead`).
+- Agent Registry validates the JSON string in `agent_spec.content` against either the **A2A v0.3 JSON Schema** (when `url` is present, requiring `version`, `name`, `description`, `url`, `capabilities`, `defaultInputModes`, `defaultOutputModes`, and `skills`) or the **A2A v1.0 Proto Schema** (when `supportedInterfaces` is present). Never mix `url` (v0.3) and `supportedInterfaces` (v1.0) in the same Agent Card JSON.
+
+### Gotcha 12: Agent Registry `services/{service_id}` vs. Auto-Generated `agents/agentregistry-{uuid}` Resource Names (and `google-adk[a2a,agent-identity,mcp]` Extras)
+- When you create a `google_agent_registry_service` with `service_id = "external-3p-lms-agent"`, Agent Registry ingests the card into the `agents/` collection under an **auto-generated UUID resource name** (`projects/{project}/locations/{region}/agents/agentregistry-{uuid}`), setting `displayName = "external-3p-lms-agent"` and a colon-delimited `agentId` URN (`["urn", "agent", "projects-<PROJECT_NUMBER>", "projects", "<PROJECT_NUMBER>", "locations", "<REGION>", "agentregistry", "services", "external-3p-lms-agent"]`). Always resolve the `agents/agentregistry-{uuid}` name via `registry.list_agents()` at startup (implemented in `_resolve_agent_registry_resource_name` inside [`gcp_agent_runtime/agent.py`](./gcp_agent_runtime/agent.py)).
+- In `google-adk>=2.0`, importing `google.adk.integrations.agent_registry.AgentRegistry` transitively imports both `GcpAuthProviderScheme` and `mcp_session_manager`, so your `requirements` list on `ReasoningEngine.create(...)` **must** install `"google-adk[a2a,agent-identity,mcp]>=1.29.0"`.
+
+### Gotcha 13: Regional `ReasoningEngine` (`us-central1`) vs. `global` Endpoint for `gemini-3.8-flash`
+`ReasoningEngine` and `AgentRegistry` require a regional location (such as `us-central1`), and `AdkApp.set_up()` automatically sets `os.environ["GOOGLE_CLOUD_LOCATION"] = "us-central1"` inside the container. However, `gemini-3.8-flash` and `gemini-3.5-flash-lite` are served on the **`global`** Vertex AI endpoint (`locations/global/publishers/google/models/gemini-3.8-flash`). Always capture `AGENT_REGISTRY_LOCATION="us-central1"` for `AgentRegistry` and then override `os.environ["GOOGLE_CLOUD_LOCATION"] = "global"` inside `StreamingAdkApp.set_up()` after `super().set_up()` (included in [`gcp_agent_runtime/deploy_agent_engine.py`](./gcp_agent_runtime/deploy_agent_engine.py)).
+
+### Gotcha 14: Avoiding `cloudpickle` Version Skew (`_ModelCache` & `extra_packages` Paths) on `ReasoningEngine.create()`
+- The Vertex AI Reasoning Engine base container pre-installs `google-adk 1.x` in `/code/.venv`. If you specify an unpinned `"google-adk>=1.29.0"` requirement while running `google-adk 2.x` locally, `pip` inside the container skips upgrading `google-adk` and `cloudpickle.loads()` fails on startup with `AttributeError: Can't get attribute '_ModelCache' on <module 'google.adk.agents.llm_agent'>`. Always pin `"google-adk[a2a,agent-identity,mcp]==2.13.0"` (matching your local SDK) AND set `app._tmpl_attrs["agent"] = None` before `ReasoningEngine.create(app)` so `build_root_agent()` is constructed fresh inside `StreamingAdkApp.set_up()` at container startup.
+- In `vertexai.reasoning_engines._upload_extra_packages`, `tar.add(file)` is called without `arcname`. Passing an absolute path in `extra_packages` nests the file under `usr/local/...` inside `dependencies.tar.gz` instead of `./agent.py`. Always `os.chdir()` into the source directory and pass relative paths (`extra_packages=["agent.py"]`).
+
+### Gotcha 15: Avoiding `Event loop is closed` on Multi-Turn `RemoteA2aAgent` Calls Inside `AdkApp`
+`AdkApp.stream_query()` invokes `Runner.run()`, which spawns a worker thread and executes `asyncio.run(_invoke_run_async())` per request—closing that thread's asyncio event loop at the end of every turn.
+- If you pass a custom `httpx.AsyncClient` to `registry.get_remote_a2a_agent(..., httpx_client=...)` with default keep-alive pooling, **Turn 1 succeeds** (`HTTP/1.1 200 OK`), and **Turn 2 fails** with `ERROR: A2A request failed: Event loop is closed` when `httpcore` attempts to reuse the pooled socket bound to Turn 1's closed loop.
+- Always configure `limits=httpx.Limits(max_keepalive_connections=0)` on custom `httpx.AsyncClient` instances passed to `RemoteA2aAgent` (included in [`gcp_agent_runtime/agent.py`](./gcp_agent_runtime/agent.py)).
+- Additionally, when `a2a-sdk` validates an A2A v0.3.0 `Task` response (`a2a.compat.v0_3.types.Task`), `contextId` is a required field alongside `id`, `kind: "task"`, `status`, and `artifacts` (included in [`external_3p_agent/app.py`](./external_3p_agent/app.py)).

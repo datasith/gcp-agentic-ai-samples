@@ -62,13 +62,22 @@ def smoke_test_direct_3p(base_url: str, bearer_token: str | None, prompt: str) -
 
 def test_via_reasoning_engine(project: str, location: str, reasoning_engine: str, prompt: str) -> None:
     import vertexai
-    from vertexai.preview.reasoning_engines import ReasoningEngine
+    from vertexai import agent_engines
 
     vertexai.init(project=project, location=location)
-    engine = ReasoningEngine(reasoning_engine)
+    engine = agent_engines.get(reasoning_engine)
     print(f"Querying GCP Agent Runtime ({reasoning_engine}) with prompt:\n  {prompt}\n")
     for event in engine.stream_query(user_id="demo-instructor", message=prompt):
-        print(event)
+        author = event.get("author")
+        for part in event.get("content", {}).get("parts", []):
+            if "function_call" in part:
+                fc = part["function_call"]
+                print(f"[{author}] TOOL CALL -> {fc['name']}({fc.get('args')})")
+            if "function_response" in part:
+                fr = part["function_response"]
+                print(f"[{author}] TOOL RESPONSE -> {fr['name']}: {fr.get('response')}")
+            if "text" in part:
+                print(f"[{author}] TEXT -> {part['text']}")
 
 
 def main() -> None:
