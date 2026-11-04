@@ -1,0 +1,4 @@
+google-cloud-aiplatform[agent_engines,adk]>=1.88.0
+google-adk[a2a]>=1.29.0
+a2a-sdk[http-server]==0.3.26
+httpx>=0.28.1

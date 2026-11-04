@@ -1,0 +1,8 @@
+project_id            = "YOUR_PROJECT_ID"
+region                = "us-central1"
+organization_id       = "YOUR_ORG_ID"
+external_3p_agent_id  = "external-3p-lms-agent"
+external_3p_agent_url = "https://YOUR_HF_USERNAME-external-a2a-lms-agent.hf.space"
+external_3p_api_token = "REPLACE_WITH_GENERATED_3P_BEARER_TOKEN"
+wif_allowed_subject   = "agent:external-3p-lms-agent"
+enable_agent_gateway  = false
