@@ -1,4 +1,4 @@
-# Agentic AI Solutions & Reference Architectures
+# GCP Agentic AI Solutions & Reference Architectures
 
 A modular collection of production-grade reference architectures, Infrastructure-as-Code (Terraform) blueprints, and runnable multi-agent implementations built on the **Gemini Enterprise Agent Platform**, **Google Agent Development Kit (ADK)**, **Agent2Agent (A2A) Protocol**, **Model Context Protocol (MCP)**, **Agent Registry**, and **Agent Gateway**.
 
@@ -9,7 +9,7 @@ A modular collection of production-grade reference architectures, Infrastructure
 Each directory under [`demos/`](./demos/) is a self-contained, runnable architectural blueprint with its own Terraform configuration, agent source code, authentication harnesses, and operational runbook:
 
 ```text
-agentic-ai-solutions/
+gcp-agentic-ai-solutions/
 ├── README.md                                     # Catalog index & architectural overview
 ├── LICENSE                                       # Apache 2.0 License
 ├── .gitignore                                    # Global exclusions (.env*, .terraform*, state files)
